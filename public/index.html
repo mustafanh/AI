@@ -86,7 +86,11 @@
 <div class="file-row">
   <label class="upload-btn" for="fileInput" data-i18n="uploadFile">Upload PDF / DOCX / TXT</label>
   <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
-  <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
+
+  <div class="file-info-wrap">
+    <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
+    <button type="button" class="remove-file-btn" id="removeFileBtn">✕</button>
+  </div>
 </div>
 
         <div class="composer glass">

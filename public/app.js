@@ -16,6 +16,7 @@ const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 const fileInput = document.getElementById("fileInput");
 const fileName = document.getElementById("fileName");
+const removeFileBtn = document.getElementById("removeFileBtn");
 const themeToggle = document.getElementById("themeToggle");
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -25,6 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateGreeting();
   bindEvents();
   autoResizeTextarea();
+  updateFileUI();
   window.initParticles();
   window.attachRippleEffect();
 
@@ -69,8 +71,16 @@ function bindEvents() {
   fileInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     state.selectedFile = file || null;
-    fileName.textContent = file ? file.name : i18next.t("noFile");
+    updateFileUI();
   });
+
+  if (removeFileBtn) {
+    removeFileBtn.addEventListener("click", () => {
+      state.selectedFile = null;
+      fileInput.value = "";
+      updateFileUI();
+    });
+  }
 
   userInput.addEventListener("input", autoResizeTextarea);
 
@@ -104,10 +114,7 @@ function setupLanguage(lang) {
 
   window.applyTranslations();
   updateGreeting();
-
-  if (!state.selectedFile) {
-    fileName.textContent = i18next.t("noFile");
-  }
+  updateFileUI();
 }
 
 function saveUserName() {
@@ -125,6 +132,22 @@ function updateGreeting() {
     greetingText.textContent = state.userName ? `مرحبا ${state.userName}` : "مرحبا";
   } else {
     greetingText.textContent = state.userName ? `Hello ${state.userName}` : "Hello";
+  }
+}
+
+function updateFileUI() {
+  if (!fileName) return;
+
+  if (state.selectedFile) {
+    fileName.textContent = state.selectedFile.name;
+    if (removeFileBtn) {
+      removeFileBtn.classList.remove("hidden");
+    }
+  } else {
+    fileName.textContent = i18next.t("noFile");
+    if (removeFileBtn) {
+      removeFileBtn.classList.add("hidden");
+    }
   }
 }
 
@@ -279,7 +302,7 @@ async function sendMessage() {
 
     state.selectedFile = null;
     fileInput.value = "";
-    fileName.textContent = i18next.t("noFile");
+    updateFileUI();
   } catch (error) {
     aiMsg.card.textContent = `Error: ${error.message}`;
   } finally {

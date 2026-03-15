@@ -712,6 +712,16 @@ body.dark .modal-backdrop {
       linear-gradient(180deg, var(--bg-2), var(--bg));
   }
 
+  .file-info-wrap {
+  width: 100%;
+}
+
+.remove-file-btn {
+  width: 32px;
+  height: 32px;
+  flex-basis: 32px;
+}
+
   body.dark .page-bg {
     background:
       radial-gradient(circle at 20% 10%, rgba(70, 92, 170, 0.14), transparent 20%),
@@ -873,6 +883,54 @@ body.dark .modal-backdrop {
   .file-row {
     align-items: stretch;
   }
+
+  .file-info-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.file-pill {
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: var(--panel-strong);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  font-size: 0.88rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 auto;
+}
+
+.remove-file-btn {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-strong);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.remove-file-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-mid);
+}
+
+.remove-file-btn.hidden {
+  display: none;
+}
 
   .file-pill {
     font-size: 0.82rem;
