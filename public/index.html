@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Learning Tools</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="app-shell">
+ <header class="topbar glass">
+  <div class="topbar-main">
+    <div class="brand">
+      <div class="logo">AI</div>
+      <div class="brand-text">
+        <h1>AI Learning Tools</h1>
+        <p data-i18n="headerSubtitle">Elegant study and productivity assistant</p>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <button class="theme-icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
+    </div>
+  </div>
+
+  <div class="topbar-bottom">
+    <div class="greeting-chip" id="greetingText">Hello</div>
+
+    <div class="lang-switch">
+      <button class="mini-btn lang-btn active" data-lang="en">English</button>
+      <button class="mini-btn lang-btn" data-lang="ar">العربية</button>
+    </div>
+  </div>
+</header>
+
+    <section class="tools-bar glass">
+      <button class="tool-btn active" data-mode="summarize" data-i18n="toolSummarize">Summarize</button>
+      <button class="tool-btn" data-mode="flashcards" data-i18n="toolFlashcards">Flashcards</button>
+      <button class="tool-btn" data-mode="quiz" data-i18n="toolQuiz">Quiz</button>
+      <button class="tool-btn" data-mode="keypoints" data-i18n="toolKeyPoints">Key Points</button>
+      <button class="tool-btn" data-mode="translate" data-i18n="toolTranslate">Translate</button>
+      <button class="tool-btn" data-mode="simplify" data-i18n="toolSimplify">Simplify</button>
+      <button class="tool-btn" data-mode="studynotes" data-i18n="toolStudyNotes">Study Notes</button>
+    </section>
+
+    <main class="chat-layout glass">
+      <div class="chat-header">
+        <div class="chat-header-badge">AI Workspace</div>
+        <div class="chat-header-text" data-i18n="welcomeMessage">
+          Welcome. Paste text or upload a file, choose a tool, and I’ll help you study better.
+        </div>
+      </div>
+
+      <section class="chat-messages" id="chatMessages">
+        <div class="message ai soft-enter">
+          <div class="avatar ai-avatar">AI</div>
+          <div class="message-card">
+            <p data-i18n="welcomeMessage">
+              Welcome. Paste text or upload a file, choose a tool, and I’ll help you study better.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="composer-area">
+        <div class="response-language-row">
+          <button class="response-lang-btn active" data-answer-language="english" data-i18n="answerEnglish">
+            Answer in English
+          </button>
+          <button class="response-lang-btn" data-answer-language="arabic" data-i18n="answerArabic">
+            Answer in Arabic
+          </button>
+        </div>
+
+<div class="file-row">
+  <label class="upload-btn" for="fileInput" data-i18n="uploadFile">Upload PDF / DOCX / TXT</label>
+  <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+  <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
+</div>
+
+        <div class="composer glass">
+          <textarea
+            id="userInput"
+            rows="1"
+            data-i18n-placeholder="inputPlaceholder"
+            placeholder="Paste your text here..."
+          ></textarea>
+
+          <div class="composer-actions">
+            <button id="sendBtn" class="send-btn">
+              <span data-i18n="send">Send</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="nameModal">
+    <div class="name-modal glass">
+      <div class="modal-icon">✨</div>
+      <h2 data-i18n="welcomeTitle">Welcome 👋</h2>
+      <p data-i18n="enterName">Enter your name</p>
+      <input type="text" id="nameInput" placeholder="Ahmed" />
+      <button id="startBtn" class="start-btn" data-i18n="start">Start</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/i18next@23.16.4/dist/umd/i18next.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>
+  <script src="./i18n.js"></script>
+  <script src="./animations.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
