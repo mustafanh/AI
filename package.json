@@ -1,5 +1,5 @@
 {
-  "name": "ai-learning-tools",
+  "name": "owl-ai",
   "version": "1.0.0",
   "description": "AI-powered learning and productivity tools with Groq, Express, Vanilla JS, i18next, and file upload support.",
   "main": "server/server.js",

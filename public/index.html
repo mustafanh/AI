@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Learning Tools</title>
+  <title>Owl AI</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,30 +19,30 @@
   <canvas id="particles-canvas"></canvas>
 
   <div class="app-shell">
- <header class="topbar glass">
-  <div class="topbar-main">
-    <div class="brand">
-      <div class="logo">AI</div>
-      <div class="brand-text">
-        <h1>AI Learning Tools</h1>
-        <p data-i18n="headerSubtitle">Elegant study and productivity assistant</p>
+    <header class="topbar glass">
+      <div class="topbar-main">
+        <div class="brand">
+          <div class="logo">🦉</div>
+          <div class="brand-text">
+            <h1>Owl AI</h1>
+            <p data-i18n="headerSubtitle">Elegant study and productivity assistant</p>
+          </div>
+        </div>
+
+        <div class="topbar-controls">
+          <button class="theme-icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
+        </div>
       </div>
-    </div>
 
-    <div class="topbar-controls">
-      <button class="theme-icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
-    </div>
-  </div>
+      <div class="topbar-bottom">
+        <div class="greeting-chip" id="greetingText">Hello</div>
 
-  <div class="topbar-bottom">
-    <div class="greeting-chip" id="greetingText">Hello</div>
-
-    <div class="lang-switch">
-      <button class="mini-btn lang-btn active" data-lang="en">English</button>
-      <button class="mini-btn lang-btn" data-lang="ar">العربية</button>
-    </div>
-  </div>
-</header>
+        <div class="lang-switch">
+          <button class="mini-btn lang-btn active" data-lang="en">English</button>
+          <button class="mini-btn lang-btn" data-lang="ar">العربية</button>
+        </div>
+      </div>
+    </header>
 
     <section class="tools-bar glass">
       <button class="tool-btn active" data-mode="summarize" data-i18n="toolSummarize">Summarize</button>
@@ -83,15 +83,15 @@
           </button>
         </div>
 
-<div class="file-row">
-  <label class="upload-btn" for="fileInput" data-i18n="uploadFile">Upload PDF / DOCX / TXT</label>
-  <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+        <div class="file-row">
+          <label class="upload-btn" for="fileInput" data-i18n="uploadFile">Upload PDF / DOCX / TXT</label>
+          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
 
-  <div class="file-info-wrap">
-    <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
-    <button type="button" class="remove-file-btn" id="removeFileBtn">✕</button>
-  </div>
-</div>
+          <div class="file-info-wrap">
+            <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
+            <button type="button" class="remove-file-btn hidden" id="removeFileBtn">✕</button>
+          </div>
+        </div>
 
         <div class="composer glass">
           <textarea
