@@ -130,7 +130,10 @@ function updateGreeting() {
 
 function applyThemeIcon(isDark) {
   themeToggle.textContent = isDark ? "🌙" : "☀️";
-  themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+  themeToggle.setAttribute(
+    "aria-label",
+    isDark ? "Switch to light mode" : "Switch to dark mode"
+  );
 }
 
 function restoreTheme() {
@@ -150,7 +153,10 @@ function toggleTheme() {
 
 function autoResizeTextarea() {
   userInput.style.height = "58px";
-  const newHeight = Math.min(userInput.scrollHeight, window.innerWidth <= 768 ? 180 : 220);
+  const newHeight = Math.min(
+    userInput.scrollHeight,
+    window.innerWidth <= 768 ? 180 : 220
+  );
   userInput.style.height = `${newHeight}px`;
 }
 
@@ -160,7 +166,8 @@ function createMessage(role, content, typing = false) {
 
   const avatar = document.createElement("div");
   avatar.className = `avatar ${role === "ai" ? "ai-avatar" : "user-avatar"}`;
-  avatar.textContent = role === "ai" ? "AI" : (state.userName?.charAt(0) || "U").toUpperCase();
+  avatar.textContent =
+    role === "ai" ? "AI" : (state.userName?.charAt(0) || "U").toUpperCase();
 
   const card = document.createElement("div");
   card.className = "message-card";
@@ -248,7 +255,15 @@ async function sendMessage() {
       body: formData
     });
 
-    const data = await response.json();
+    const contentType = response.headers.get("content-type") || "";
+    let data;
+
+    if (contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const rawText = await response.text();
+      throw new Error(rawText || "Server returned non-JSON response.");
+    }
 
     if (!response.ok) {
       throw new Error(data.error || "Request failed.");
