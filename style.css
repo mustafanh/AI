@@ -203,6 +203,13 @@ body.dark #particles-canvas {
   position: relative;
   overflow: visible;
 }
+@media (max-width: 768px) {
+  .topbar {
+    position: sticky;
+    top: 10px;
+    z-index: 50;
+  }
+}
 
 .topbar-main {
   display: flex;
@@ -388,9 +395,12 @@ body.dark #particles-canvas {
 @media (max-width: 768px) {
   .chat-layout {
     flex: none !important;
-    height: auto !important;
+    /* Take remaining viewport height after sticky topbar (~90px) */
+    height: calc(100svh - 110px) !important;
     min-height: unset !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 }
 
@@ -450,10 +460,13 @@ body.dark .chat-header {
 }
 @media (max-width: 768px) {
   .chat-messages {
-    flex: none !important;
-    height: auto !important;
+    flex: 1 !important;
+    height: 0 !important;
+    min-height: 0 !important;
     max-height: none !important;
-    overflow-y: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -544,6 +557,13 @@ body.dark .message.user .message-card {
   padding: 14px 16px 10px;
   border-top: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .composer-area {
+    flex-shrink: 0 !important;
+    position: static !important;
+  }
 }
 
 body.dark .composer-area {
@@ -1935,48 +1955,92 @@ body.dark .modal-backdrop {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   MOBILE STICKY COMPOSER — chat scrolls, input stays at bottom
-   ═══════════════════════════════════════════════════════════════ */
+/* ===== MOBILE CHAT LAYOUT OVERRIDE: fixed top + fixed composer, scroll only messages ===== */
 @media (max-width: 768px) {
+  html,
+  body {
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden !important;
+  }
 
-  /* The chat panel becomes a fixed-height flex column */
-  .chat-layout {
+  body {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+
+  .app-shell {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+    padding: 10px !important;
+    gap: 10px !important;
+    flex-direction: column !important;
+  }
+
+  .main-content {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    gap: 10px !important;
+  }
+
+  .topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 60 !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  .chat-tools-row {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
     display: flex !important;
     flex-direction: column !important;
-    /* full viewport minus topbar (~110px) and page padding (~20px) */
-    height: calc(100svh - 130px) !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: hidden !important;
-    flex: none !important;
   }
 
-  /* Messages area scrolls inside the panel */
+  .chat-layout {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .chat-header {
+    flex: 0 0 auto !important;
+  }
+
   .chat-messages {
     flex: 1 1 auto !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    height: 0 !important;        /* flex trick: makes it shrink/grow correctly */
     min-height: 0 !important;
+    height: auto !important;
     max-height: none !important;
-    padding-bottom: 8px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain;
+    padding-bottom: 14px !important;
   }
 
-  /* Composer sticks to bottom of the panel — never scrolls away */
   .composer-area {
     flex: 0 0 auto !important;
     position: relative !important;
     bottom: auto !important;
-    width: 100% !important;
-    background: var(--panel-strong) !important;
-    border-top: 1px solid var(--line) !important;
-    padding: 10px 12px 14px !important;
-    z-index: 10 !important;
+    z-index: 5 !important;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.06);
   }
 
-  /* Footer hidden on mobile — saves space */
+  body.dark .composer-area {
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+  }
+
   .page-footer {
     display: none !important;
   }
