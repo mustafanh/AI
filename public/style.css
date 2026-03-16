@@ -59,7 +59,7 @@ body[dir="rtl"] {
 
 body {
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -317,9 +317,19 @@ body.dark #particles-canvas {
   flex-wrap: nowrap;
   gap: 8px;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  cursor: grab;
+}
+
+.tools-bar:active {
+  cursor: grabbing;
+}
+
+.tool-btn {
+  scroll-snap-align: start;
 }
 
 .tools-bar::-webkit-scrollbar {

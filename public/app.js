@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateImageUI();
   window.initParticles();
   window.attachRippleEffect();
+  window.attachToolsBarDrag();
 
   if (state.userName) {
     nameModal.style.display = "none";
@@ -57,14 +58,6 @@ function bindEvents() {
       document.querySelectorAll(".tool-btn").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       state.mode = btn.dataset.mode;
-    });
-  });
-
-  document.querySelectorAll(".response-lang-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".response-lang-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      state.answerLanguage = btn.dataset.answerLanguage;
     });
   });
 

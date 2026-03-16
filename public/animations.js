@@ -83,3 +83,29 @@ window.attachRippleEffect = function attachRippleEffect() {
     });
   });
 };
+
+window.attachToolsBarDrag = function attachToolsBarDrag() {
+  const bar = document.querySelector(".tools-bar");
+  if (!bar) return;
+
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  bar.addEventListener("mousedown", (e) => {
+    isDown = true;
+    startX = e.pageX - bar.offsetLeft;
+    scrollLeft = bar.scrollLeft;
+  });
+
+  bar.addEventListener("mouseleave", () => { isDown = false; });
+  bar.addEventListener("mouseup", () => { isDown = false; });
+
+  bar.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - bar.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    bar.scrollLeft = scrollLeft - walk;
+  });
+};
