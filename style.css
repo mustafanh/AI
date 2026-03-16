@@ -1812,20 +1812,21 @@ body.dark .modal-backdrop {
   .tools-sheet { display: none !important; }
 }
 
-/* ─── MOBILE LAYOUT — SINGLE SOURCE OF TRUTH ────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   MOBILE LAYOUT — SINGLE DEFINITIVE BLOCK (do not add more below)
+   ════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* 1. Let the page scroll naturally */
+  /* ── 1. Page scrolls naturally ── */
   html, body {
     height: auto !important;
-    min-height: 100svh;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
     position: static !important;
   }
 
-  /* 2. App shell: stack vertically, no clipping */
+  /* ── 2. App shell: vertical stack, no size/overflow lock ── */
   .app-shell {
     height: auto !important;
     min-height: unset !important;
@@ -1833,7 +1834,7 @@ body.dark .modal-backdrop {
     flex-direction: column !important;
   }
 
-  /* 3. Main content: natural height */
+  /* ── 3. Main content: shrink-wrap ── */
   .main-content {
     height: auto !important;
     min-height: unset !important;
@@ -1842,7 +1843,7 @@ body.dark .modal-backdrop {
     gap: 10px !important;
   }
 
-  /* 4. Chat + tools row: stacked, no clipping */
+  /* ── 4. Chat+tools row: vertical, no clip ── */
   .chat-tools-row {
     height: auto !important;
     min-height: unset !important;
@@ -1851,7 +1852,7 @@ body.dark .modal-backdrop {
     flex: none !important;
   }
 
-  /* 5. Chat layout: natural height, scrolls with the page */
+  /* ── 5. Chat layout: shrink to content ── */
   .chat-layout {
     height: auto !important;
     min-height: unset !important;
@@ -1859,20 +1860,23 @@ body.dark .modal-backdrop {
     flex: none !important;
   }
 
-  /* 6. Chat messages: grow naturally, no max-height trap */
+  /* ── 6. THE KEY FIX: chat-messages must NOT flex-stretch ──
+     flex:1 on a non-fixed parent = infinite empty space on mobile.
+     Let it shrink to its actual content height instead.        ── */
   .chat-messages {
+    flex: none !important;
     height: auto !important;
-    min-height: 160px;
+    min-height: unset !important;
     max-height: none !important;
     overflow-y: visible !important;
   }
 
-  /* 7. Composer always in flow */
+  /* ── 7. Composer always in normal flow ── */
   .composer-area {
     position: static !important;
   }
 
-  /* 8. FAB position */
+  /* ── 8. FAB ── */
   .tools-fab {
     bottom: 16px !important;
     right: 16px !important;
