@@ -11,134 +11,248 @@
 
   <link rel="stylesheet" href="./style.css" />
 </head>
+
 <body>
-  <div class="page-bg"></div>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-  <div class="bg-orb orb-3"></div>
-  <canvas id="particles-canvas"></canvas>
 
-  <div class="app-shell">
-    <header class="topbar glass">
-      <div class="topbar-main">
-        <div class="brand">
-          <div class="logo">🦉</div>
-          <div class="brand-text">
-            <h1>Owl AI</h1>
-           <p data-i18n="welcomeMessage">
-  Welcome. Paste your text, upload a document, or upload an image.  
-  Choose one of the AI tools above such as Summarize, Flashcards, Quiz, or Key Points,  
-  and Owl AI will help you study, understand, and organize your learning more efficiently.
+<div class="page-bg"></div>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+<canvas id="particles-canvas"></canvas>
+
+<div class="app-shell">
+
+<header class="topbar glass">
+
+<div class="topbar-main">
+
+<div class="brand">
+
+<div class="logo">🦉</div>
+
+<div class="brand-text">
+<h1>Owl AI</h1>
+
+<p data-i18n="headerDescription">
+Smart AI tools designed to help you learn faster, understand complex topics, and organize your study workflow.
 </p>
-          </div>
-        </div>
 
-        <div class="topbar-controls">
-          <button class="theme-icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
-        </div>
-      </div>
+</div>
+</div>
 
-      <div class="topbar-bottom">
-        <div class="greeting-chip" id="greetingText">Hello</div>
+<div class="topbar-controls">
+<button class="theme-icon-btn" id="themeToggle">☀️</button>
+</div>
 
-        <div class="lang-switch">
-          <button class="mini-btn lang-btn active" data-lang="en">English</button>
-          <button class="mini-btn lang-btn" data-lang="ar">العربية</button>
-        </div>
-      </div>
-    </header>
+</div>
 
-    <section class="tools-bar glass">
-      <button class="tool-btn active" data-mode="summarize" data-i18n="toolSummarize">Summarize</button>
-      <button class="tool-btn" data-mode="flashcards" data-i18n="toolFlashcards">Flashcards</button>
-      <button class="tool-btn" data-mode="quiz" data-i18n="toolQuiz">Quiz</button>
-      <button class="tool-btn" data-mode="keypoints" data-i18n="toolKeyPoints">Key Points</button>
-      <button class="tool-btn" data-mode="translate" data-i18n="toolTranslate">Translate</button>
-      <button class="tool-btn" data-mode="simplify" data-i18n="toolSimplify">Simplify</button>
-      <button class="tool-btn" data-mode="studynotes" data-i18n="toolStudyNotes">Study Notes</button>
-    </section>
 
-    <main class="chat-layout glass">
-      <div class="chat-header">
-        <div class="chat-header-badge">AI Workspace</div>
-        <div class="chat-header-text" data-i18n="welcomeMessage">
-          Welcome. Paste text, upload a file, or upload an image and I’ll help you study better.
-        </div>
-      </div>
+<div class="topbar-bottom">
 
-      <section class="chat-messages" id="chatMessages">
-        <div class="message ai soft-enter">
-          <div class="avatar ai-avatar">AI</div>
-          <div class="message-card">
-            <p data-i18n="welcomeMessage">
-              Welcome. Paste text, upload a file, or upload an image and I’ll help you study better.
-            </p>
-          </div>
-        </div>
-      </section>
+<div class="greeting-chip" id="greetingText">
+Hello
+</div>
 
-      <section class="composer-area">
-        <div class="response-language-row">
-          <button class="response-lang-btn active" data-answer-language="english" data-i18n="answerEnglish">
-            Answer in English
-          </button>
-          <button class="response-lang-btn" data-answer-language="arabic" data-i18n="answerArabic">
-            Answer in Arabic
-          </button>
-        </div>
+<div class="lang-switch">
+<button class="mini-btn lang-btn active" data-lang="en">English</button>
+<button class="mini-btn lang-btn" data-lang="ar">العربية</button>
+</div>
 
-        <div class="file-row">
-          <label class="upload-btn" for="fileInput" data-i18n="uploadFile">Upload PDF / DOCX / TXT</label>
-          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+</div>
 
-          <div class="file-info-wrap">
-            <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
-            <button type="button" class="remove-file-btn hidden" id="removeFileBtn">✕</button>
-          </div>
-        </div>
+</header>
 
-        <div class="image-row">
-          <label class="upload-btn image-upload-btn" for="imageInput" data-i18n="uploadImage">Upload Image</label>
-          <input type="file" id="imageInput" accept=".png,.jpg,.jpeg,.webp" hidden />
 
-          <div class="file-info-wrap">
-            <span class="file-pill" id="imageName" data-i18n="noImage">No image selected</span>
-            <button type="button" class="remove-file-btn hidden" id="removeImageBtn">✕</button>
-          </div>
-        </div>
+<section class="tools-bar glass">
 
-        <div class="composer glass">
-          <textarea
-            id="userInput"
-            rows="1"
-            data-i18n-placeholder="inputPlaceholder"
-            placeholder="Paste your text here..."
-          ></textarea>
+<button class="tool-btn active" data-mode="summarize" data-i18n="toolSummarize">Summarize</button>
 
-          <div class="composer-actions">
-            <button id="sendBtn" class="send-btn">
-              <span data-i18n="send">Send</span>
-            </button>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
+<button class="tool-btn" data-mode="flashcards" data-i18n="toolFlashcards">Flashcards</button>
 
-  <div class="modal-backdrop" id="nameModal">
-    <div class="name-modal glass">
-      <div class="modal-icon">✨</div>
-      <h2 data-i18n="welcomeTitle">Welcome 👋</h2>
-      <p data-i18n="enterName">Enter your name</p>
-      <input type="text" id="nameInput" placeholder="Ahmed" />
-      <button id="startBtn" class="start-btn" data-i18n="start">Start</button>
-    </div>
-  </div>
+<button class="tool-btn" data-mode="quiz" data-i18n="toolQuiz">Quiz</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/i18next@23.16.4/dist/umd/i18next.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>
-  <script src="./i18n.js"></script>
-  <script src="./animations.js"></script>
-  <script src="./app.js"></script>
+<button class="tool-btn" data-mode="keypoints" data-i18n="toolKeyPoints">Key Points</button>
+
+<button class="tool-btn" data-mode="translate" data-i18n="toolTranslate">Translate</button>
+
+<button class="tool-btn" data-mode="simplify" data-i18n="toolSimplify">Simplify</button>
+
+<button class="tool-btn" data-mode="studynotes" data-i18n="toolStudyNotes">Study Notes</button>
+
+</section>
+
+
+
+<main class="chat-layout glass">
+
+
+<div class="chat-header">
+
+<div class="chat-header-badge">
+AI Workspace
+</div>
+
+<div class="chat-header-text" data-i18n="workspaceDescription">
+Choose a tool above, paste your text, upload a document, or analyze an image to start learning with AI.
+</div>
+
+</div>
+
+
+
+<section class="chat-messages" id="chatMessages">
+
+
+<div class="message ai soft-enter">
+
+<div class="avatar ai-avatar">
+AI
+</div>
+
+<div class="message-card">
+
+<p data-i18n="aiWelcomeMessage">
+Hi! I'm Owl AI. Send me text, a document, or an image and I'll help you summarize, create flashcards, generate quizzes, or simplify the content for studying.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="composer-area">
+
+
+<div class="response-language-row">
+
+<button class="response-lang-btn active" data-answer-language="english" data-i18n="answerEnglish">
+Answer in English
+</button>
+
+<button class="response-lang-btn" data-answer-language="arabic" data-i18n="answerArabic">
+Answer in Arabic
+</button>
+
+</div>
+
+
+
+<div class="file-row">
+
+<label class="upload-btn" for="fileInput" data-i18n="uploadFile">
+Upload PDF / DOCX / TXT
+</label>
+
+<input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden>
+
+<div class="file-info-wrap">
+
+<span class="file-pill" id="fileName" data-i18n="noFile">
+No file selected
+</span>
+
+<button type="button" class="remove-file-btn hidden" id="removeFileBtn">
+✕
+</button>
+
+</div>
+
+</div>
+
+
+
+<div class="image-row">
+
+<label class="upload-btn image-upload-btn" for="imageInput" data-i18n="uploadImage">
+Upload Image
+</label>
+
+<input type="file" id="imageInput" accept=".png,.jpg,.jpeg,.webp" hidden>
+
+<div class="file-info-wrap">
+
+<span class="file-pill" id="imageName" data-i18n="noImage">
+No image selected
+</span>
+
+<button type="button" class="remove-file-btn hidden" id="removeImageBtn">
+✕
+</button>
+
+</div>
+
+</div>
+
+
+
+<div class="composer glass">
+
+<textarea
+id="userInput"
+rows="1"
+data-i18n-placeholder="inputPlaceholder"
+placeholder="Paste your text here..."
+></textarea>
+
+
+<div class="composer-actions">
+
+<button id="sendBtn" class="send-btn">
+<span data-i18n="send">Send</span>
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+
+<div class="modal-backdrop" id="nameModal">
+
+<div class="name-modal glass">
+
+<div class="modal-icon">
+✨
+</div>
+
+<h2 data-i18n="welcomeTitle">
+Welcome 👋
+</h2>
+
+<p data-i18n="enterName">
+Enter your name
+</p>
+
+<input type="text" id="nameInput" placeholder="Ahmed">
+
+<button id="startBtn" class="start-btn" data-i18n="start">
+Start
+</button>
+
+</div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/i18next@23.16.4/dist/umd/i18next.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>
+
+<script src="./i18n.js"></script>
+
+<script src="./animations.js"></script>
+
+<script src="./app.js"></script>
+
 </body>
 </html>

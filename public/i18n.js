@@ -2,6 +2,9 @@ const resources = {
   en: {
     translation: {
       headerSubtitle: "Elegant study and productivity assistant",
+      headerDescription:
+        "Smart AI tools designed to help you learn faster, understand complex topics, and organize your study workflow.",
+
       toolSummarize: "Summarize",
       toolFlashcards: "Flashcards",
       toolQuiz: "Quiz",
@@ -9,7 +12,13 @@ const resources = {
       toolTranslate: "Translate",
       toolSimplify: "Simplify",
       toolStudyNotes: "Study Notes",
-      welcomeMessage: "Welcome. Paste your text, upload a document, or upload an image. Choose one of the AI tools above such as Summarize, Flashcards, Quiz, or Key Points, and Owl AI will help you study, understand, and organize your learning efficiently.",
+
+      workspaceDescription:
+        "Choose a tool above, paste your text, upload a document, or analyze an image to start learning with AI.",
+
+      aiWelcomeMessage:
+        "Hi! I'm Owl AI. Send me text, a document, or an image and I'll help you summarize, create flashcards, generate quizzes, or simplify the content for studying.",
+
       answerEnglish: "Answer in English",
       answerArabic: "Answer in Arabic",
       uploadFile: "Upload PDF / DOCX / TXT",
@@ -26,6 +35,9 @@ const resources = {
   ar: {
     translation: {
       headerSubtitle: "مساعد أنيق للدراسة والإنتاجية",
+      headerDescription:
+        "أدوات ذكاء اصطناعي متقدمة تساعدك على التعلم بسرعة، فهم المواضيع المعقدة، وتنظيم دراستك بذكاء.",
+
       toolSummarize: "تلخيص",
       toolFlashcards: "فلاش كارد",
       toolQuiz: "اختبار",
@@ -33,7 +45,13 @@ const resources = {
       toolTranslate: "ترجمة",
       toolSimplify: "تبسيط",
       toolStudyNotes: "ملاحظات دراسية",
-      welcomeMessage: "مرحباً. الصق النص أو ارفع ملفاً أو صورة، وسأساعدك على الدراسة بشكل أفضل.",
+
+      workspaceDescription:
+        "اختر إحدى الأدوات أعلاه، ثم الصق النص أو ارفع ملفًا أو صورة لبدء التعلم باستخدام الذكاء الاصطناعي.",
+
+      aiWelcomeMessage:
+        "مرحبًا! أنا Owl AI. أرسل نصًا أو ملفًا أو صورة وسأساعدك في التلخيص، إنشاء فلاش كارد، إعداد اختبارات، أو تبسيط المحتوى للدراسة.",
+
       answerEnglish: "أجب بالإنجليزية",
       answerArabic: "أجب بالعربية",
       uploadFile: "رفع PDF / DOCX / TXT",
