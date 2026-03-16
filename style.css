@@ -59,7 +59,7 @@ body[dir="rtl"] {
 
 body {
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -152,6 +152,16 @@ body.dark #particles-canvas {
   width: 100%;
 }
 
+/* ── MOBILE: unlock scroll on app-shell ── */
+@media (max-width: 768px) {
+  .app-shell {
+    height: auto !important;
+    min-height: 100svh;
+    overflow: visible !important;
+    flex-direction: column;
+  }
+}
+
 .main-content {
   flex: 1;
   display: flex;
@@ -163,6 +173,15 @@ body.dark #particles-canvas {
   padding: 18px;
   gap: 14px;
   width: 100%;
+}
+
+/* ── MOBILE: main-content scrolls naturally ── */
+@media (max-width: 768px) {
+  .main-content {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 10px;
+  }
 }
 
 .glass {
@@ -366,6 +385,14 @@ body.dark #particles-canvas {
   overflow: hidden;
   min-height: 0;
 }
+@media (max-width: 768px) {
+  .chat-layout {
+    flex: none !important;
+    height: auto !important;
+    min-height: unset !important;
+    overflow: visible !important;
+  }
+}
 
 /* Row wrapper for chat + tools sidebar */
 .chat-tools-row {
@@ -375,6 +402,15 @@ body.dark #particles-canvas {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+}
+@media (max-width: 768px) {
+  .chat-tools-row {
+    flex-direction: column !important;
+    flex: none !important;
+    height: auto !important;
+    min-height: unset !important;
+    overflow: visible !important;
+  }
 }
 
 .chat-header {
@@ -411,6 +447,14 @@ body.dark .chat-header {
   overflow-x: hidden;
   padding: 20px 18px 14px;
   scroll-behavior: smooth;
+}
+@media (max-width: 768px) {
+  .chat-messages {
+    flex: none !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
 }
 
 .message {
@@ -878,7 +922,7 @@ body.dark .modal-backdrop {
   }
 
   .chat-layout {
-    min-height: unset;
+    min-height: calc(100vh - 150px);
   }
 
   .chat-header {
@@ -1810,75 +1854,4 @@ body.dark .modal-backdrop {
   .tools-fab,
   .tools-sheet-overlay,
   .tools-sheet { display: none !important; }
-}
-
-/* ════════════════════════════════════════════════════════════════
-   MOBILE LAYOUT — SINGLE DEFINITIVE BLOCK (do not add more below)
-   ════════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-
-  /* ── 1. Page scrolls naturally ── */
-  html, body {
-    height: auto !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    position: static !important;
-  }
-
-  /* ── 2. App shell: vertical stack, no size/overflow lock ── */
-  .app-shell {
-    height: auto !important;
-    min-height: unset !important;
-    overflow: visible !important;
-    flex-direction: column !important;
-  }
-
-  /* ── 3. Main content: shrink-wrap ── */
-  .main-content {
-    height: auto !important;
-    min-height: unset !important;
-    overflow: visible !important;
-    padding: 10px !important;
-    gap: 10px !important;
-  }
-
-  /* ── 4. Chat+tools row: vertical, no clip ── */
-  .chat-tools-row {
-    height: auto !important;
-    min-height: unset !important;
-    overflow: visible !important;
-    flex-direction: column !important;
-    flex: none !important;
-  }
-
-  /* ── 5. Chat layout: shrink to content ── */
-  .chat-layout {
-    height: auto !important;
-    min-height: unset !important;
-    overflow: visible !important;
-    flex: none !important;
-  }
-
-  /* ── 6. THE KEY FIX: chat-messages must NOT flex-stretch ──
-     flex:1 on a non-fixed parent = infinite empty space on mobile.
-     Let it shrink to its actual content height instead.        ── */
-  .chat-messages {
-    flex: none !important;
-    height: auto !important;
-    min-height: unset !important;
-    max-height: none !important;
-    overflow-y: visible !important;
-  }
-
-  /* ── 7. Composer always in normal flow ── */
-  .composer-area {
-    position: static !important;
-  }
-
-  /* ── 8. FAB ── */
-  .tools-fab {
-    bottom: 16px !important;
-    right: 16px !important;
-  }
 }
