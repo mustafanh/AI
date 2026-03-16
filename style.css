@@ -203,13 +203,6 @@ body.dark #particles-canvas {
   position: relative;
   overflow: visible;
 }
-@media (max-width: 768px) {
-  .topbar {
-    position: sticky;
-    top: 10px;
-    z-index: 50;
-  }
-}
 
 .topbar-main {
   display: flex;
@@ -395,12 +388,9 @@ body.dark #particles-canvas {
 @media (max-width: 768px) {
   .chat-layout {
     flex: none !important;
-    /* Take remaining viewport height after sticky topbar (~90px) */
-    height: calc(100svh - 110px) !important;
+    height: auto !important;
     min-height: unset !important;
-    overflow: hidden !important;
-    display: flex !important;
-    flex-direction: column !important;
+    overflow: visible !important;
   }
 }
 
@@ -460,13 +450,10 @@ body.dark .chat-header {
 }
 @media (max-width: 768px) {
   .chat-messages {
-    flex: 1 !important;
-    height: 0 !important;
-    min-height: 0 !important;
+    flex: none !important;
+    height: auto !important;
     max-height: none !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: visible !important;
   }
 }
 
@@ -557,13 +544,6 @@ body.dark .message.user .message-card {
   padding: 14px 16px 10px;
   border-top: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
-  flex-shrink: 0;
-}
-@media (max-width: 768px) {
-  .composer-area {
-    flex-shrink: 0 !important;
-    position: static !important;
-  }
 }
 
 body.dark .composer-area {
@@ -1876,86 +1856,7 @@ body.dark .modal-backdrop {
   .tools-sheet { display: none !important; }
 }
 
-/* MOBILE FIX — allow page scroll */
-@media (max-width:768px){
-
-  html, body{
-    height:auto;
-    overflow-y:auto;
-  }
-
-  .app-shell{
-    height:auto !important;
-    min-height:100vh;
-    overflow:visible !important;
-    flex-direction:column;
-  }
-
-  .main-content{
-    height:auto !important;
-    overflow:visible !important;
-  }
-
-  .chat-tools-row{
-    height:auto !important;
-    overflow:visible !important;
-  }
-
-  .chat-layout{
-    height:auto !important;
-    overflow:visible !important;
-  }
-
-  .chat-messages{
-    max-height:none !important;
-    overflow:visible !important;
-  }
-
-}
-
-/* ===== MOBILE SCROLL FIX PATCH ===== */
-@media (max-width: 768px) {
-  html,
-  body {
-    height: auto !important;
-    min-height: 100%;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  body {
-    overflow-x: hidden !important;
-  }
-
-  .app-shell {
-    height: auto !important;
-    min-height: 100svh !important;
-    overflow: visible !important;
-    flex-direction: column !important;
-  }
-
-  .main-content,
-  .chat-tools-row,
-  .chat-layout,
-  .chat-messages {
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-  }
-
-  .composer-area {
-    position: relative !important;
-    bottom: auto !important;
-  }
-
-  .page-footer {
-    padding-bottom: 18px !important;
-  }
-}
-
-/* ===== MOBILE CHAT LAYOUT OVERRIDE: fixed top + fixed composer, scroll only messages ===== */
+/* ===== MOBILE CHAT READABILITY FIX ===== */
 @media (max-width: 768px) {
   html,
   body {
@@ -1973,24 +1874,25 @@ body.dark .modal-backdrop {
     height: 100dvh !important;
     min-height: 100dvh !important;
     overflow: hidden !important;
+    flex-direction: column !important;
     padding: 10px !important;
     gap: 10px !important;
-    flex-direction: column !important;
   }
 
   .main-content {
-    height: 100% !important;
+    flex: 1 1 auto !important;
     min-height: 0 !important;
+    height: 100% !important;
     overflow: hidden !important;
     padding: 0 !important;
     gap: 10px !important;
   }
 
   .topbar {
+    flex: 0 0 auto !important;
     position: sticky !important;
     top: 0 !important;
-    z-index: 60 !important;
-    flex: 0 0 auto !important;
+    z-index: 20 !important;
     margin: 0 !important;
   }
 
@@ -2024,21 +1926,24 @@ body.dark .modal-backdrop {
     overflow-x: hidden !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain;
-    padding-bottom: 14px !important;
+    overscroll-behavior: contain !important;
+    scroll-behavior: smooth;
   }
 
   .composer-area {
     flex: 0 0 auto !important;
-    position: relative !important;
-    bottom: auto !important;
-    z-index: 5 !important;
-    border-top: 1px solid var(--line);
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.06);
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 15 !important;
+    background: var(--panel) !important;
+    border-top: 1px solid var(--line) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.08);
   }
 
   body.dark .composer-area {
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.24);
   }
 
   .page-footer {
