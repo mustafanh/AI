@@ -58,7 +58,7 @@
       <div class="chat-header">
         <div class="chat-header-badge">AI Workspace</div>
         <div class="chat-header-text" data-i18n="welcomeMessage">
-          Welcome. Paste text or upload a file, choose a tool, and I’ll help you study better.
+          Welcome. Paste text, upload a file, or upload an image and I’ll help you study better.
         </div>
       </div>
 
@@ -67,7 +67,7 @@
           <div class="avatar ai-avatar">AI</div>
           <div class="message-card">
             <p data-i18n="welcomeMessage">
-              Welcome. Paste text or upload a file, choose a tool, and I’ll help you study better.
+              Welcome. Paste text, upload a file, or upload an image and I’ll help you study better.
             </p>
           </div>
         </div>
@@ -90,6 +90,16 @@
           <div class="file-info-wrap">
             <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
             <button type="button" class="remove-file-btn hidden" id="removeFileBtn">✕</button>
+          </div>
+        </div>
+
+        <div class="image-row">
+          <label class="upload-btn image-upload-btn" for="imageInput" data-i18n="uploadImage">Upload Image</label>
+          <input type="file" id="imageInput" accept=".png,.jpg,.jpeg,.webp" hidden />
+
+          <div class="file-info-wrap">
+            <span class="file-pill" id="imageName" data-i18n="noImage">No image selected</span>
+            <button type="button" class="remove-file-btn hidden" id="removeImageBtn">✕</button>
           </div>
         </div>
 

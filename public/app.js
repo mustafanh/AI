@@ -4,6 +4,7 @@ const state = {
   uiLanguage: localStorage.getItem("uiLanguage") || "en",
   userName: localStorage.getItem("userName") || "",
   selectedFile: null,
+  selectedImage: null,
   chatHistory: []
 };
 
@@ -14,9 +15,15 @@ const greetingText = document.getElementById("greetingText");
 const chatMessages = document.getElementById("chatMessages");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
+
 const fileInput = document.getElementById("fileInput");
 const fileName = document.getElementById("fileName");
 const removeFileBtn = document.getElementById("removeFileBtn");
+
+const imageInput = document.getElementById("imageInput");
+const imageName = document.getElementById("imageName");
+const removeImageBtn = document.getElementById("removeImageBtn");
+
 const themeToggle = document.getElementById("themeToggle");
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -27,6 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindEvents();
   autoResizeTextarea();
   updateFileUI();
+  updateImageUI();
   window.initParticles();
   window.attachRippleEffect();
 
@@ -71,6 +79,26 @@ function bindEvents() {
   fileInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     state.selectedFile = file || null;
+
+    if (file) {
+      state.selectedImage = null;
+      imageInput.value = "";
+    }
+
+    updateFileUI();
+    updateImageUI();
+  });
+
+  imageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    state.selectedImage = file || null;
+
+    if (file) {
+      state.selectedFile = null;
+      fileInput.value = "";
+    }
+
+    updateImageUI();
     updateFileUI();
   });
 
@@ -79,6 +107,14 @@ function bindEvents() {
       state.selectedFile = null;
       fileInput.value = "";
       updateFileUI();
+    });
+  }
+
+  if (removeImageBtn) {
+    removeImageBtn.addEventListener("click", () => {
+      state.selectedImage = null;
+      imageInput.value = "";
+      updateImageUI();
     });
   }
 
@@ -94,7 +130,6 @@ function bindEvents() {
   });
 
   sendBtn.addEventListener("click", sendMessage);
-
   themeToggle.addEventListener("click", toggleTheme);
 
   window.addEventListener("resize", () => {
@@ -115,6 +150,7 @@ function setupLanguage(lang) {
   window.applyTranslations();
   updateGreeting();
   updateFileUI();
+  updateImageUI();
 }
 
 function saveUserName() {
@@ -140,14 +176,22 @@ function updateFileUI() {
 
   if (state.selectedFile) {
     fileName.textContent = state.selectedFile.name;
-    if (removeFileBtn) {
-      removeFileBtn.classList.remove("hidden");
-    }
+    if (removeFileBtn) removeFileBtn.classList.remove("hidden");
   } else {
     fileName.textContent = i18next.t("noFile");
-    if (removeFileBtn) {
-      removeFileBtn.classList.add("hidden");
-    }
+    if (removeFileBtn) removeFileBtn.classList.add("hidden");
+  }
+}
+
+function updateImageUI() {
+  if (!imageName) return;
+
+  if (state.selectedImage) {
+    imageName.textContent = state.selectedImage.name;
+    if (removeImageBtn) removeImageBtn.classList.remove("hidden");
+  } else {
+    imageName.textContent = i18next.t("noImage");
+    if (removeImageBtn) removeImageBtn.classList.add("hidden");
   }
 }
 
@@ -242,9 +286,15 @@ function typeText(element, text) {
 async function sendMessage() {
   const text = userInput.value.trim();
 
-  if (!text && !state.selectedFile) return;
+  if (!text && !state.selectedFile && !state.selectedImage) return;
 
-  const userVisibleText = text || `[${state.selectedFile?.name || "File uploaded"}]`;
+  let userVisibleText = text;
+  if (!userVisibleText && state.selectedImage) {
+    userVisibleText = `[Image: ${state.selectedImage.name}]`;
+  } else if (!userVisibleText && state.selectedFile) {
+    userVisibleText = `[File: ${state.selectedFile.name}]`;
+  }
+
   createMessage("user", userVisibleText);
 
   if (text) {
@@ -271,6 +321,10 @@ async function sendMessage() {
 
     if (state.selectedFile) {
       formData.append("file", state.selectedFile);
+    }
+
+    if (state.selectedImage) {
+      formData.append("image", state.selectedImage);
     }
 
     const response = await fetch("/api/chat", {
@@ -301,8 +355,11 @@ async function sendMessage() {
     });
 
     state.selectedFile = null;
+    state.selectedImage = null;
     fileInput.value = "";
+    imageInput.value = "";
     updateFileUI();
+    updateImageUI();
   } catch (error) {
     aiMsg.card.textContent = `Error: ${error.message}`;
   } finally {

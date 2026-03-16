@@ -468,7 +468,8 @@ body.dark .composer-area {
   border: 1px solid var(--line);
 }
 
-.file-row {
+.file-row,
+.image-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -476,7 +477,8 @@ body.dark .composer-area {
   margin-bottom: 10px;
 }
 
-body[dir="rtl"] .file-row {
+body[dir="rtl"] .file-row,
+body[dir="rtl"] .image-row {
   flex-direction: row-reverse;
 }
 
@@ -490,6 +492,10 @@ body[dir="rtl"] .file-row {
   box-shadow: var(--shadow-soft);
   border: 1px solid var(--line);
   flex: 0 0 auto;
+}
+
+.image-upload-btn {
+  background: linear-gradient(135deg, rgba(125,140,255,0.12), rgba(155,188,255,0.16));
 }
 
 .file-info-wrap {
@@ -845,7 +851,8 @@ body.dark .modal-backdrop {
     text-align: center;
   }
 
-  .file-row {
+  .file-row,
+  .image-row {
     gap: 8px;
   }
 
@@ -914,7 +921,8 @@ body.dark .modal-backdrop {
     font-size: 0.82rem;
   }
 
-  .file-row {
+  .file-row,
+  .image-row {
     align-items: stretch;
   }
 
