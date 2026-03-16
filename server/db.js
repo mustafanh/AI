@@ -1,6 +1,9 @@
 // server/db.js
 // Supabase database helper for Owl AI
 
+import { config } from "dotenv";
+config();
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
 
@@ -51,7 +54,6 @@ export async function getUser(id) {
 }
 
 export async function updateUser(id, updates) {
-  // updates: { name, language, answer_language, theme, last_seen_at }
   const rows = await supabase(
     `users?id=eq.${encodeURIComponent(id)}`,
     "PATCH",
