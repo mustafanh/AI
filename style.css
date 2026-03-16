@@ -1892,3 +1892,92 @@ body.dark .modal-backdrop {
   }
 
 }
+
+/* ===== MOBILE SCROLL FIX PATCH ===== */
+@media (max-width: 768px) {
+  html,
+  body {
+    height: auto !important;
+    min-height: 100%;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .app-shell {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow: visible !important;
+    flex-direction: column !important;
+  }
+
+  .main-content,
+  .chat-tools-row,
+  .chat-layout,
+  .chat-messages {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .composer-area {
+    position: relative !important;
+    bottom: auto !important;
+  }
+
+  .page-footer {
+    padding-bottom: 18px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE STICKY COMPOSER — chat scrolls, input stays at bottom
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* The chat panel becomes a fixed-height flex column */
+  .chat-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    /* full viewport minus topbar (~110px) and page padding (~20px) */
+    height: calc(100svh - 130px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    flex: none !important;
+  }
+
+  /* Messages area scrolls inside the panel */
+  .chat-messages {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: 0 !important;        /* flex trick: makes it shrink/grow correctly */
+    min-height: 0 !important;
+    max-height: none !important;
+    padding-bottom: 8px !important;
+  }
+
+  /* Composer sticks to bottom of the panel — never scrolls away */
+  .composer-area {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    bottom: auto !important;
+    width: 100% !important;
+    background: var(--panel-strong) !important;
+    border-top: 1px solid var(--line) !important;
+    padding: 10px 12px 14px !important;
+    z-index: 10 !important;
+  }
+
+  /* Footer hidden on mobile — saves space */
+  .page-footer {
+    display: none !important;
+  }
+}
