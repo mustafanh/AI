@@ -468,7 +468,7 @@ body.dark .message.user .message-card {
 
 /* Composer */
 .composer-area {
-  padding: 14px 16px 16px;
+  padding: 14px 16px 10px;
   border-top: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
 }
@@ -625,6 +625,18 @@ textarea::placeholder {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
+}
+
+.page-footer {
+  padding: 0 16px 14px;
+  text-align: center;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+  opacity: 0.8;
 }
 
 /* Modal */
@@ -873,7 +885,7 @@ body.dark .modal-backdrop {
   }
 
   .composer-area {
-    padding: 12px;
+    padding: 12px 12px 8px;
   }
 
   .response-language-row {
@@ -929,6 +941,10 @@ body.dark .modal-backdrop {
     width: 100%;
     min-width: 0;
     min-height: 48px;
+  }
+
+  .page-footer {
+    padding: 0 12px 12px;
   }
 }
 
@@ -1007,12 +1023,4 @@ body.dark .modal-backdrop {
     transform: translateY(0);
     filter: blur(0);
   }
-}
-
-.copyright{
-  text-align:center;
-  font-size:0.78rem;
-  color:var(--muted);
-  margin-top:6px;
-  opacity:0.8;
 }
