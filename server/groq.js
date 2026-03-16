@@ -89,7 +89,7 @@ export async function generateAIResponse({
   let model = "llama-3.3-70b-versatile";
 
   if (hasImage) {
-    model = "meta-llama/llama-4-maverick-17b-128e-instruct";
+    model = "meta-llama/llama-4-scout-17b-16e-instruct";
 
     const lastMessageIndex = [...preparedMessages]
       .reverse()
@@ -103,10 +103,11 @@ export async function generateAIResponse({
     const imageUrl = encodeImageToDataUrl(imageFile);
 
     if (actualIndex >= 0) {
+      const existingContent = preparedMessages[actualIndex].content;
       const existingText =
-        typeof preparedMessages[actualIndex].content === "string"
-          ? preparedMessages[actualIndex].content
-          : "";
+        typeof existingContent === "string"
+          ? existingContent
+          : "Analyze this image according to the selected mode.";
 
       preparedMessages[actualIndex] = {
         role: "user",
