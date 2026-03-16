@@ -1008,3 +1008,11 @@ body.dark .modal-backdrop {
     filter: blur(0);
   }
 }
+
+.copyright{
+  text-align:center;
+  font-size:0.78rem;
+  color:var(--muted);
+  margin-top:6px;
+  opacity:0.8;
+}
