@@ -9,7 +9,7 @@ const resources = {
       toolTranslate: "Translate",
       toolSimplify: "Simplify",
       toolStudyNotes: "Study Notes",
-      welcomeMessage: "Welcome. Paste text, upload a file, or upload an image and I’ll help you study better.",
+      welcomeMessage: "Welcome. Paste your text, upload a document, or upload an image. Choose one of the AI tools above such as Summarize, Flashcards, Quiz, or Key Points, and Owl AI will help you study, understand, and organize your learning efficiently.",
       answerEnglish: "Answer in English",
       answerArabic: "Answer in Arabic",
       uploadFile: "Upload PDF / DOCX / TXT",
