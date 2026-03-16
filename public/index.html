@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -20,159 +19,194 @@
   <canvas id="particles-canvas"></canvas>
 
   <div class="app-shell">
-    <header class="topbar glass">
-      <div class="topbar-main">
-        <div class="brand">
-          <div class="logo">🦉</div>
 
-          <div class="brand-text">
-            <h1>Owl AI</h1>
+    <!-- SIDEBAR -->
+    <aside class="sidebar glass" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">💬 Conversations</span>
+        <button class="new-chat-btn" id="newChatBtn" title="New chat">＋</button>
+      </div>
+      <div class="conv-list" id="convList"></div>
+      <div class="sidebar-footer">
+        <div class="user-id-badge" id="userIdBadge"></div>
+        <button class="logout-btn" id="logoutBtn">⏻ Logout</button>
+      </div>
+    </aside>
 
-            <p data-i18n="headerDescription">
-              Smart AI tools designed to help you learn faster, understand complex topics, and organize your study workflow.
-            </p>
+    <!-- MAIN -->
+    <div class="main-content">
+
+      <!-- TOPBAR -->
+      <header class="topbar glass">
+        <div class="topbar-main">
+          <div class="brand">
+            <button class="sidebar-toggle" id="sidebarToggle" title="History">☰</button>
+            <div class="logo">🦉</div>
+            <div class="brand-text">
+              <h1>Owl AI</h1>
+              <p data-i18n="headerDescription">
+                Smart AI tools designed to help you learn faster, understand complex topics, and organize your study workflow.
+              </p>
+            </div>
+          </div>
+          <div class="topbar-controls">
+            <button class="theme-icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
           </div>
         </div>
 
-        <div class="topbar-controls">
-          <button class="theme-icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
-        </div>
-      </div>
-
-      <div class="topbar-bottom">
-        <div class="greeting-chip" id="greetingText">Hello</div>
-
-        <div class="lang-switch">
-          <button class="mini-btn lang-btn active" data-lang="en">English</button>
-          <button class="mini-btn lang-btn" data-lang="ar">العربية</button>
-        </div>
-      </div>
-    </header>
-
-    <section class="tools-bar glass">
-      <button class="tool-btn active" data-mode="summarize" data-i18n="toolSummarize">Summarize</button>
-      <button class="tool-btn" data-mode="flashcards" data-i18n="toolFlashcards">Flashcards</button>
-      <button class="tool-btn" data-mode="quiz" data-i18n="toolQuiz">Quiz</button>
-      <button class="tool-btn" data-mode="keypoints" data-i18n="toolKeyPoints">Key Points</button>
-      <button class="tool-btn" data-mode="translate" data-i18n="toolTranslate">Translate</button>
-      <button class="tool-btn" data-mode="simplify" data-i18n="toolSimplify">Simplify</button>
-      <button class="tool-btn" data-mode="studynotes" data-i18n="toolStudyNotes">Study Notes</button>
-      <button class="tool-btn" data-mode="mindmap" data-i18n="toolMindMap">Mind Map</button>
-      <button class="tool-btn" data-mode="explain" data-i18n="toolExplain">Explain</button>
-      <button class="tool-btn" data-mode="compare" data-i18n="toolCompare">Compare</button>
-      <button class="tool-btn" data-mode="timeline" data-i18n="toolTimeline">Timeline</button>
-      <button class="tool-btn" data-mode="definitions" data-i18n="toolDefinitions">Definitions</button>
-      <button class="tool-btn" data-mode="examples" data-i18n="toolExamples">Examples</button>
-      <button class="tool-btn" data-mode="critique" data-i18n="toolCritique">Critique</button>
-      <button class="tool-btn" data-mode="essay" data-i18n="toolEssay">Essay</button>
-      <button class="tool-btn" data-mode="outline" data-i18n="toolOutline">Outline</button>
-      <button class="tool-btn" data-mode="paraphrase" data-i18n="toolParaphrase">Paraphrase</button>
-      <button class="tool-btn" data-mode="procon" data-i18n="toolProCon">Pro & Con</button>
-    </section>
-
-    <main class="chat-layout glass">
-      <div class="chat-header">
-        <div class="chat-header-badge">
-          AI Workspace
-        </div>
-
-        <div class="chat-header-text" data-i18n="workspaceDescription">
-          Choose a tool above, paste your text, upload a document, or analyze an image to start learning with AI.
-        </div>
-      </div>
-
-      <section class="chat-messages" id="chatMessages">
-        <div class="message ai soft-enter">
-          <div class="avatar ai-avatar">AI</div>
-
-          <div class="message-card">
-            <p data-i18n="aiWelcomeMessage">
-              Hi! I'm Owl AI. Send me text, a document, or an image and I'll help you summarize, create flashcards, generate quizzes, or simplify the content for studying.
-            </p>
+        <div class="topbar-bottom">
+          <div class="greeting-chip" id="greetingText">Hello</div>
+          <div class="lang-switch">
+            <button class="mini-btn lang-btn active" data-lang="en">English</button>
+            <button class="mini-btn lang-btn" data-lang="ar">العربية</button>
           </div>
         </div>
+      </header>
+
+      <!-- TOOLS BAR -->
+      <section class="tools-bar glass">
+        <button class="tool-btn active" data-mode="summarize"   data-i18n="toolSummarize">Summarize</button>
+        <button class="tool-btn" data-mode="flashcards"  data-i18n="toolFlashcards">Flashcards</button>
+        <button class="tool-btn" data-mode="quiz"        data-i18n="toolQuiz">Quiz</button>
+        <button class="tool-btn" data-mode="keypoints"   data-i18n="toolKeyPoints">Key Points</button>
+        <button class="tool-btn" data-mode="translate"   data-i18n="toolTranslate">Translate</button>
+        <button class="tool-btn" data-mode="simplify"    data-i18n="toolSimplify">Simplify</button>
+        <button class="tool-btn" data-mode="studynotes"  data-i18n="toolStudyNotes">Study Notes</button>
+        <button class="tool-btn" data-mode="mindmap"     data-i18n="toolMindMap">Mind Map</button>
+        <button class="tool-btn" data-mode="explain"     data-i18n="toolExplain">Explain</button>
+        <button class="tool-btn" data-mode="compare"     data-i18n="toolCompare">Compare</button>
+        <button class="tool-btn" data-mode="timeline"    data-i18n="toolTimeline">Timeline</button>
+        <button class="tool-btn" data-mode="definitions" data-i18n="toolDefinitions">Definitions</button>
+        <button class="tool-btn" data-mode="examples"    data-i18n="toolExamples">Examples</button>
+        <button class="tool-btn" data-mode="critique"    data-i18n="toolCritique">Critique</button>
+        <button class="tool-btn" data-mode="essay"       data-i18n="toolEssay">Essay</button>
+        <button class="tool-btn" data-mode="outline"     data-i18n="toolOutline">Outline</button>
+        <button class="tool-btn" data-mode="paraphrase"  data-i18n="toolParaphrase">Paraphrase</button>
+        <button class="tool-btn" data-mode="procon"      data-i18n="toolProCon">Pro &amp; Con</button>
       </section>
 
-      <section class="composer-area">
-        <div class="file-row">
-          <label class="upload-btn" for="fileInput" data-i18n="uploadFile">
-            Upload PDF / DOCX / TXT
-          </label>
-
-          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden>
-
-          <div class="file-info-wrap">
-            <span class="file-pill" id="fileName" data-i18n="noFile">
-              No file selected
-            </span>
-
-            <button type="button" class="remove-file-btn hidden" id="removeFileBtn">
-              ✕
-            </button>
+      <!-- CHAT LAYOUT -->
+      <main class="chat-layout glass">
+        <div class="chat-header">
+          <div class="chat-header-badge">AI Workspace</div>
+          <div class="chat-header-text" data-i18n="workspaceDescription">
+            Choose a tool above, paste your text, upload a document, or analyze an image to start learning with AI.
           </div>
         </div>
 
-        <div class="image-row">
-          <label class="upload-btn image-upload-btn" for="imageInput" data-i18n="uploadImage">
-            Upload Image
-          </label>
-
-          <input type="file" id="imageInput" accept=".png,.jpg,.jpeg,.webp" hidden>
-
-          <div class="file-info-wrap">
-            <span class="file-pill" id="imageName" data-i18n="noImage">
-              No image selected
-            </span>
-
-            <button type="button" class="remove-file-btn hidden" id="removeImageBtn">
-              ✕
-            </button>
+        <section class="chat-messages" id="chatMessages">
+          <div class="message ai soft-enter">
+            <div class="avatar ai-avatar">AI</div>
+            <div class="message-card">
+              <p data-i18n="aiWelcomeMessage">
+                Hi! I'm Owl AI. Send me text, a document, or an image and I'll help you summarize, create flashcards, generate quizzes, or simplify the content for studying.
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div class="composer glass">
-          <textarea
-            id="userInput"
-            rows="1"
-            data-i18n-placeholder="inputPlaceholder"
-            placeholder="Paste your text here..."
-          ></textarea>
-
-          <div class="composer-actions">
-            <button id="sendBtn" class="send-btn">
-              <span data-i18n="send">Send</span>
-            </button>
+        <section class="composer-area">
+          <div class="file-row">
+            <label class="upload-btn" for="fileInput" data-i18n="uploadFile">Upload PDF / DOCX / TXT</label>
+            <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden>
+            <div class="file-info-wrap">
+              <span class="file-pill" id="fileName" data-i18n="noFile">No file selected</span>
+              <button type="button" class="remove-file-btn hidden" id="removeFileBtn">✕</button>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <div class="page-footer">
-        <div class="copyright">
-          © Mustafa Nawfal 2026
+          <div class="image-row">
+            <label class="upload-btn image-upload-btn" for="imageInput" data-i18n="uploadImage">Upload Image</label>
+            <input type="file" id="imageInput" accept=".png,.jpg,.jpeg,.webp" hidden>
+            <div class="file-info-wrap">
+              <span class="file-pill" id="imageName" data-i18n="noImage">No image selected</span>
+              <button type="button" class="remove-file-btn hidden" id="removeImageBtn">✕</button>
+            </div>
+          </div>
+
+          <div class="composer glass">
+            <textarea
+              id="userInput"
+              rows="1"
+              data-i18n-placeholder="inputPlaceholder"
+              placeholder="Paste your text here..."
+            ></textarea>
+            <div class="composer-actions">
+              <button id="sendBtn" class="send-btn">
+                <span data-i18n="send">Send</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="page-footer">
+          <div class="copyright">© Mustafa Nawfal 2026</div>
         </div>
+      </main>
+
+    </div><!-- end .main-content -->
+  </div><!-- end .app-shell -->
+
+  <!-- ─── AUTH MODAL ─────────────────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="authModal">
+    <div class="auth-modal glass">
+
+      <div class="auth-modal-logo">🦉</div>
+      <h2 class="auth-modal-title">Owl AI</h2>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab" id="authTabRegister" data-i18n="tabRegister">Create Account</button>
+        <button class="auth-tab" id="authTabLogin"    data-i18n="tabLogin">Sign In</button>
       </div>
-    </main>
-  </div>
 
-  <div class="modal-backdrop" id="nameModal">
-    <div class="name-modal glass">
-      <div class="modal-icon">✨</div>
+      <!-- REGISTER -->
+      <div id="registerSection" class="auth-section">
+        <div class="field-group">
+          <label data-i18n="labelId">Choose your unique ID</label>
+          <input type="text" id="regIdInput" placeholder="e.g. mustafa_99" autocomplete="off" spellcheck="false">
+          <div class="field-status" id="regIdStatus"></div>
+          <div class="field-hint" data-i18n="idHint">3–30 chars · letters, numbers, underscores</div>
+        </div>
 
-      <h2 data-i18n="welcomeTitle">
-        Welcome 👋
-      </h2>
+        <div class="field-group">
+          <label data-i18n="labelName">Your name</label>
+          <input type="text" id="regNameInput" placeholder="Mustafa">
+        </div>
 
-      <p data-i18n="enterName">
-        Enter your name
-      </p>
+        <div class="privacy-notice">
+          <span class="privacy-icon">🔒</span>
+          <span data-i18n="privacyNotice">
+            Your ID, name, and conversations are stored securely on Supabase cloud servers to enable history sync across devices.
+          </span>
+        </div>
 
-      <input type="text" id="nameInput" placeholder="Ahmed">
+        <div class="auth-error" id="registerError"></div>
+        <button class="auth-btn" id="registerBtn" data-i18n="btnRegister">Create Account</button>
+      </div>
 
-      <button id="startBtn" class="start-btn" data-i18n="start">
-        Start
-      </button>
+      <!-- LOGIN -->
+      <div id="loginSection" class="auth-section" style="display:none">
+        <div class="field-group">
+          <label data-i18n="labelId">Your ID</label>
+          <input type="text" id="loginIdInput" placeholder="mustafa_99" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="privacy-notice">
+          <span class="privacy-icon">🔒</span>
+          <span data-i18n="privacyNoticeLogin">
+            Your conversations are retrieved from Supabase cloud using your ID.
+          </span>
+        </div>
+
+        <div class="auth-error" id="loginError"></div>
+        <button class="auth-btn" id="loginBtn" data-i18n="btnLogin">Sign In</button>
+      </div>
+
     </div>
   </div>
+
+  <!-- WELCOME BACK TOAST goes in body dynamically -->
 
   <script src="https://cdn.jsdelivr.net/npm/i18next@23.16.4/dist/umd/i18next.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>

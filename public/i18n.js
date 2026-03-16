@@ -1,3 +1,30 @@
+// ── ADD THESE KEYS to your existing i18n.js ──────────────────────────────────
+// Inside the `en.translation` object, add:
+
+const newKeysEN = {
+  tabRegister:   "Create Account",
+  tabLogin:      "Sign In",
+  labelId:       "Your unique ID",
+  labelName:     "Your name",
+  idHint:        "3–30 chars · letters, numbers, underscores only",
+  btnRegister:   "Create Account",
+  btnLogin:      "Sign In",
+};
+
+// Inside the `ar.translation` object, add:
+
+const newKeysAR = {
+  tabRegister:   "إنشاء حساب",
+  tabLogin:      "دخول",
+  labelId:       "الـ ID الخاص بك",
+  labelName:     "اسمك",
+  idHint:        "٣–٣٠ حرفاً · أحرف إنجليزية وأرقام وشرطة سفلية فقط",
+  btnRegister:   "إنشاء حساب",
+  btnLogin:      "دخول",
+};
+
+// ── FULL UPDATED i18n.js (copy-paste ready) ──────────────────────────────────
+
 const resources = {
   en: {
     translation: {
@@ -23,28 +50,32 @@ const resources = {
       toolOutline: "Outline",
       toolParaphrase: "Paraphrase",
       toolProCon: "Pro & Con",
-      toolMindMap: "Mind Map",
-      toolExplain: "Explain",
-      toolCompare: "Compare",
-      toolTimeline: "Timeline",
-      toolDefinitions: "Definitions",
-      toolExamples: "Examples",
 
       workspaceDescription:
         "Choose a tool above, paste your text, upload a document, or analyze an image to start learning with AI.",
-
       aiWelcomeMessage:
         "Hi! I'm Owl AI. Send me text, a document, or an image and I'll help you summarize, create flashcards, generate quizzes, or simplify the content for studying.",
 
-      uploadFile: "Upload PDF / DOCX / TXT",
+      uploadFile:  "Upload PDF / DOCX / TXT",
       uploadImage: "Upload Image",
-      noFile: "No file selected",
-      noImage: "No image selected",
+      noFile:      "No file selected",
+      noImage:     "No image selected",
       inputPlaceholder: "Paste your text here...",
       send: "Send",
-      welcomeTitle: "Welcome 👋",
-      enterName: "Enter your name",
-      start: "Start"
+
+      // Auth
+      tabRegister:  "Create Account",
+      tabLogin:     "Sign In",
+      labelId:      "Your unique ID",
+      labelName:    "Your name",
+      idHint:       "3–30 chars · letters, numbers, underscores only",
+      btnRegister:  "Create Account",
+      btnLogin:     "Sign In",
+
+      privacyNotice:
+        "Your ID, name, and conversations are stored securely on Supabase cloud servers to enable history sync across devices.",
+      privacyNoticeLogin:
+        "Your conversations are retrieved from Supabase cloud using your ID.",
     }
   },
   ar: {
@@ -71,38 +102,38 @@ const resources = {
       toolOutline: "مخطط",
       toolParaphrase: "إعادة صياغة",
       toolProCon: "إيجابيات وسلبيات",
-      toolMindMap: "خريطة ذهنية",
-      toolExplain: "شرح",
-      toolCompare: "مقارنة",
-      toolTimeline: "جدول زمني",
-      toolDefinitions: "تعريفات",
-      toolExamples: "أمثلة",
 
       workspaceDescription:
         "اختر إحدى الأدوات أعلاه، ثم الصق النص أو ارفع ملفًا أو صورة لبدء التعلم باستخدام الذكاء الاصطناعي.",
-
       aiWelcomeMessage:
         "مرحبًا! أنا Owl AI. أرسل نصًا أو ملفًا أو صورة وسأساعدك في التلخيص، إنشاء فلاش كارد، إعداد اختبارات، أو تبسيط المحتوى للدراسة.",
 
-      uploadFile: "رفع PDF / DOCX / TXT",
+      uploadFile:  "رفع PDF / DOCX / TXT",
       uploadImage: "رفع صورة",
-      noFile: "لم يتم اختيار ملف",
-      noImage: "لم يتم اختيار صورة",
+      noFile:      "لم يتم اختيار ملف",
+      noImage:     "لم يتم اختيار صورة",
       inputPlaceholder: "الصق النص هنا...",
       send: "إرسال",
-      welcomeTitle: "مرحباً 👋",
-      enterName: "أدخل اسمك",
-      start: "ابدأ"
+
+      // Auth
+      tabRegister:  "إنشاء حساب",
+      tabLogin:     "دخول",
+      labelId:      "الـ ID الخاص بك",
+      labelName:    "اسمك",
+      idHint:       "٣–٣٠ حرفاً · أحرف إنجليزية وأرقام وشرطة سفلية فقط",
+      btnRegister:  "إنشاء حساب",
+      btnLogin:     "دخول",
+
+      privacyNotice:
+        "سيتم حفظ الـ ID واسمك ومحادثاتك بشكل آمن على خوادم Supabase السحابية لمزامنة السجل عبر أجهزتك.",
+      privacyNoticeLogin:
+        "سيتم استرجاع محادثاتك من سحابة Supabase باستخدام الـ ID الخاص بك.",
     }
   }
 };
 
 window.initI18n = async function initI18n(defaultLang = "en") {
-  await i18next.init({
-    lng: defaultLang,
-    resources
-  });
-
+  await i18next.init({ lng: defaultLang, resources });
   window.applyTranslations();
 };
 
@@ -110,7 +141,6 @@ window.applyTranslations = function applyTranslations() {
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     el.textContent = i18next.t(el.dataset.i18n);
   });
-
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     el.placeholder = i18next.t(el.dataset.i18nPlaceholder);
   });
