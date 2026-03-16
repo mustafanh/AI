@@ -1,3 +1,6 @@
+import { config } from "dotenv";
+config();
+
 import Groq from "groq-sdk";
 
 const groq = new Groq({
@@ -20,27 +23,21 @@ function buildSystemPrompt(
     summarize: isArabic
       ? "لخّص المحتوى بوضوح مع أهم الأفكار بشكل منظم ومفيد."
       : "Summarize the content clearly with the most important ideas in a well-structured way.",
-
     flashcards: isArabic
       ? "حوّل المحتوى إلى بطاقات تعليمية. كل بطاقة يجب أن تحتوي: سؤال ثم جواب."
       : "Turn the content into study flashcards. Each flashcard must contain: Question then Answer.",
-
     quiz: isArabic
       ? "أنشئ اختباراً قصيراً منظمًا من المحتوى مع أسئلة متعددة الخيارات ثم ضع الإجابات الصحيحة في النهاية."
       : "Create a well-structured quiz from the content with multiple-choice questions, then provide the correct answers at the end.",
-
     keypoints: isArabic
       ? "استخرج النقاط الأساسية فقط بشكل مرتب وواضح."
       : "Extract only the key points in a clean and readable structure.",
-
     translate: isArabic
       ? "إذا كان المحتوى بلغة أخرى فترجمه إلى العربية ترجمة طبيعية وواضحة."
       : "If the content is in another language, translate it into English naturally and clearly.",
-
     simplify: isArabic
       ? "بسّط المحتوى ليصبح أسهل للفهم مع الحفاظ على المعنى."
       : "Simplify the content so it becomes easier to understand without losing the meaning.",
-
     studynotes: isArabic
       ? "أنشئ ملاحظات دراسية منظمة بعناوين فرعية ونقاط مهمة وشرح مختصر."
       : "Generate organized study notes with headings, bullet points, and concise explanations."
@@ -79,10 +76,7 @@ export async function generateAIResponse({
   const systemPrompt = buildSystemPrompt(mode, language, userName, hasImage);
 
   const preparedMessages = [
-    {
-      role: "system",
-      content: systemPrompt
-    },
+    { role: "system", content: systemPrompt },
     ...messages
   ];
 
@@ -112,32 +106,16 @@ export async function generateAIResponse({
       preparedMessages[actualIndex] = {
         role: "user",
         content: [
-          {
-            type: "text",
-            text: existingText || "Analyze this image according to the selected mode."
-          },
-          {
-            type: "image_url",
-            image_url: {
-              url: imageUrl
-            }
-          }
+          { type: "text", text: existingText || "Analyze this image according to the selected mode." },
+          { type: "image_url", image_url: { url: imageUrl } }
         ]
       };
     } else {
       preparedMessages.push({
         role: "user",
         content: [
-          {
-            type: "text",
-            text: "Analyze this image according to the selected mode."
-          },
-          {
-            type: "image_url",
-            image_url: {
-              url: imageUrl
-            }
-          }
+          { type: "text", text: "Analyze this image according to the selected mode." },
+          { type: "image_url", image_url: { url: imageUrl } }
         ]
       });
     }
