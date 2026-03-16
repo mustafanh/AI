@@ -1854,36 +1854,80 @@ body.dark .modal-backdrop {
   }
 }
 
-/* ─── MOBILE SCROLL FIX ─────────────────────────────────────── */
+/* ─── MOBILE SCROLL FIX (FINAL) ─────────────────────────────── */
 @media (max-width: 768px) {
-  html, body {
+  /* Allow the whole page to scroll naturally */
+  html {
     height: auto !important;
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
   }
+  body {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    position: static !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* App shell: full column, no height/overflow clipping */
   .app-shell {
     height: auto !important;
     min-height: 100svh !important;
     overflow: visible !important;
+    overflow-x: hidden !important;
     flex-direction: column !important;
+    position: relative !important;
   }
+
+  /* Main content: natural height */
   .main-content {
     height: auto !important;
+    min-height: unset !important;
     overflow: visible !important;
+    overflow-x: hidden !important;
+    padding: 10px !important;
+    gap: 10px !important;
   }
+
+  /* Chat + tools row: stacked, no clipping */
   .chat-tools-row {
     height: auto !important;
-    overflow: visible !important;
-    flex-direction: column !important;
     min-height: unset !important;
+    overflow: visible !important;
+    overflow-x: hidden !important;
+    flex-direction: column !important;
+    flex: none !important;
   }
+
+  /* Chat layout: natural height, no overflow clip */
   .chat-layout {
     height: auto !important;
     min-height: unset !important;
     overflow: visible !important;
     flex: none !important;
   }
+
+  /* Chat messages: scrollable area with comfortable height */
   .chat-messages {
-    max-height: 45vh;
-    overflow-y: auto;
+    height: auto !important;
+    min-height: 200px !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Composer area always visible */
+  .composer-area {
+    position: static !important;
+    bottom: auto !important;
+  }
+
+  /* FAB adjusted */
+  .tools-fab {
+    bottom: 16px !important;
+    right: 16px !important;
   }
 }
