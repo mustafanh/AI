@@ -59,7 +59,7 @@ body[dir="rtl"] {
 
 body {
   position: relative;
-  overflow-x: clip;
+  overflow-x: hidden;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -878,7 +878,7 @@ body.dark .modal-backdrop {
   }
 
   .chat-layout {
-    min-height: calc(100vh - 150px);
+    min-height: unset;
   }
 
   .chat-header {
@@ -1812,97 +1812,46 @@ body.dark .modal-backdrop {
   .tools-sheet { display: none !important; }
 }
 
-/* ─── MOBILE LAYOUT FIX ─────────────────────────────────────── */
+/* ─── MOBILE LAYOUT — SINGLE SOURCE OF TRUTH ────────────────── */
 @media (max-width: 768px) {
-  .app-shell {
-    height: auto;
-    min-height: 100dvh;
-    overflow: visible;
-    flex-direction: column;
-  }
 
-  .main-content {
-    height: auto;
-    overflow: visible;
-    padding: 12px;
-    gap: 10px;
-  }
-
-  .chat-tools-row {
-    flex-direction: column;
-    height: auto;
-    overflow: visible;
-    min-height: 0;
-  }
-
-  .chat-layout {
-    height: auto;
-    min-height: 60vh;
-    overflow: visible;
-    flex: none;
-  }
-
-  .chat-messages {
-    max-height: 55vh;
-    overflow-y: auto;
-  }
-
-  /* FAB position */
-  .tools-fab {
-    bottom: 16px;
-    right: 16px;
-  }
-}
-
-/* ─── MOBILE SCROLL FIX (FINAL) ─────────────────────────────── */
-@media (max-width: 768px) {
-  /* Allow the whole page to scroll naturally */
-  html {
+  /* 1. Let the page scroll naturally */
+  html, body {
     height: auto !important;
-    overflow-y: auto !important;
+    min-height: 100svh;
     overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  body {
-    height: auto !important;
-    min-height: 100svh !important;
     overflow-y: auto !important;
-    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
     position: static !important;
-    -webkit-overflow-scrolling: touch !important;
   }
 
-  /* App shell: full column, no height/overflow clipping */
+  /* 2. App shell: stack vertically, no clipping */
   .app-shell {
     height: auto !important;
-    min-height: 100svh !important;
+    min-height: unset !important;
     overflow: visible !important;
-    overflow-x: hidden !important;
     flex-direction: column !important;
-    position: relative !important;
   }
 
-  /* Main content: natural height */
+  /* 3. Main content: natural height */
   .main-content {
     height: auto !important;
     min-height: unset !important;
     overflow: visible !important;
-    overflow-x: hidden !important;
     padding: 10px !important;
     gap: 10px !important;
   }
 
-  /* Chat + tools row: stacked, no clipping */
+  /* 4. Chat + tools row: stacked, no clipping */
   .chat-tools-row {
     height: auto !important;
     min-height: unset !important;
     overflow: visible !important;
-    overflow-x: hidden !important;
     flex-direction: column !important;
     flex: none !important;
   }
 
-  /* Chat layout: natural height, no overflow clip */
+  /* 5. Chat layout: natural height, scrolls with the page */
   .chat-layout {
     height: auto !important;
     min-height: unset !important;
@@ -1910,22 +1859,20 @@ body.dark .modal-backdrop {
     flex: none !important;
   }
 
-  /* Chat messages: scrollable area with comfortable height */
+  /* 6. Chat messages: grow naturally, no max-height trap */
   .chat-messages {
     height: auto !important;
-    min-height: 200px !important;
+    min-height: 160px;
     max-height: none !important;
     overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch !important;
   }
 
-  /* Composer area always visible */
+  /* 7. Composer always in flow */
   .composer-area {
     position: static !important;
-    bottom: auto !important;
   }
 
-  /* FAB adjusted */
+  /* 8. FAB position */
   .tools-fab {
     bottom: 16px !important;
     right: 16px !important;
