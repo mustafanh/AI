@@ -1855,3 +1855,40 @@ body.dark .modal-backdrop {
   .tools-sheet-overlay,
   .tools-sheet { display: none !important; }
 }
+
+/* MOBILE FIX — allow page scroll */
+@media (max-width:768px){
+
+  html, body{
+    height:auto;
+    overflow-y:auto;
+  }
+
+  .app-shell{
+    height:auto !important;
+    min-height:100vh;
+    overflow:visible !important;
+    flex-direction:column;
+  }
+
+  .main-content{
+    height:auto !important;
+    overflow:visible !important;
+  }
+
+  .chat-tools-row{
+    height:auto !important;
+    overflow:visible !important;
+  }
+
+  .chat-layout{
+    height:auto !important;
+    overflow:visible !important;
+  }
+
+  .chat-messages{
+    max-height:none !important;
+    overflow:visible !important;
+  }
+
+}
