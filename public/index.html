@@ -63,27 +63,8 @@
         </div>
       </header>
 
-      <!-- TOOLS BAR -->
-      <section class="tools-bar glass">
-        <button class="tool-btn active" data-mode="summarize"   data-i18n="toolSummarize">Summarize</button>
-        <button class="tool-btn" data-mode="flashcards"  data-i18n="toolFlashcards">Flashcards</button>
-        <button class="tool-btn" data-mode="quiz"        data-i18n="toolQuiz">Quiz</button>
-        <button class="tool-btn" data-mode="keypoints"   data-i18n="toolKeyPoints">Key Points</button>
-        <button class="tool-btn" data-mode="translate"   data-i18n="toolTranslate">Translate</button>
-        <button class="tool-btn" data-mode="simplify"    data-i18n="toolSimplify">Simplify</button>
-        <button class="tool-btn" data-mode="studynotes"  data-i18n="toolStudyNotes">Study Notes</button>
-        <button class="tool-btn" data-mode="mindmap"     data-i18n="toolMindMap">Mind Map</button>
-        <button class="tool-btn" data-mode="explain"     data-i18n="toolExplain">Explain</button>
-        <button class="tool-btn" data-mode="compare"     data-i18n="toolCompare">Compare</button>
-        <button class="tool-btn" data-mode="timeline"    data-i18n="toolTimeline">Timeline</button>
-        <button class="tool-btn" data-mode="definitions" data-i18n="toolDefinitions">Definitions</button>
-        <button class="tool-btn" data-mode="examples"    data-i18n="toolExamples">Examples</button>
-        <button class="tool-btn" data-mode="critique"    data-i18n="toolCritique">Critique</button>
-        <button class="tool-btn" data-mode="essay"       data-i18n="toolEssay">Essay</button>
-        <button class="tool-btn" data-mode="outline"     data-i18n="toolOutline">Outline</button>
-        <button class="tool-btn" data-mode="paraphrase"  data-i18n="toolParaphrase">Paraphrase</button>
-        <button class="tool-btn" data-mode="procon"      data-i18n="toolProCon">Pro &amp; Con</button>
-      </section>
+      <!-- CHAT + TOOLS ROW -->
+      <div class="chat-tools-row">
 
       <!-- CHAT LAYOUT -->
       <main class="chat-layout glass">
@@ -144,6 +125,30 @@
         </div>
       </main>
 
+      <!-- TOOLS SIDEBAR (right) -->
+      <section class="tools-bar glass">
+        <button class="tool-btn active" data-mode="summarize"   data-i18n="toolSummarize">Summarize</button>
+        <button class="tool-btn" data-mode="flashcards"  data-i18n="toolFlashcards">Flashcards</button>
+        <button class="tool-btn" data-mode="quiz"        data-i18n="toolQuiz">Quiz</button>
+        <button class="tool-btn" data-mode="keypoints"   data-i18n="toolKeyPoints">Key Points</button>
+        <button class="tool-btn" data-mode="translate"   data-i18n="toolTranslate">Translate</button>
+        <button class="tool-btn" data-mode="simplify"    data-i18n="toolSimplify">Simplify</button>
+        <button class="tool-btn" data-mode="studynotes"  data-i18n="toolStudyNotes">Study Notes</button>
+        <button class="tool-btn" data-mode="mindmap"     data-i18n="toolMindMap">Mind Map</button>
+        <button class="tool-btn" data-mode="explain"     data-i18n="toolExplain">Explain</button>
+        <button class="tool-btn" data-mode="compare"     data-i18n="toolCompare">Compare</button>
+        <button class="tool-btn" data-mode="timeline"    data-i18n="toolTimeline">Timeline</button>
+        <button class="tool-btn" data-mode="definitions" data-i18n="toolDefinitions">Definitions</button>
+        <button class="tool-btn" data-mode="examples"    data-i18n="toolExamples">Examples</button>
+        <button class="tool-btn" data-mode="critique"    data-i18n="toolCritique">Critique</button>
+        <button class="tool-btn" data-mode="essay"       data-i18n="toolEssay">Essay</button>
+        <button class="tool-btn" data-mode="outline"     data-i18n="toolOutline">Outline</button>
+        <button class="tool-btn" data-mode="paraphrase"  data-i18n="toolParaphrase">Paraphrase</button>
+        <button class="tool-btn" data-mode="procon"      data-i18n="toolProCon">Pro &amp; Con</button>
+      </section>
+
+      </div><!-- end .chat-tools-row -->
+
     </div><!-- end .main-content -->
   </div><!-- end .app-shell -->
 
@@ -202,6 +207,37 @@
   </div>
 
   <!-- WELCOME BACK TOAST goes in body dynamically -->
+
+
+  <!-- ─── MOBILE TOOLS FAB + BOTTOM SHEET ──────────────────── -->
+  <button class="tools-fab" id="toolsFab" aria-label="Tools">⚡</button>
+
+  <div class="tools-sheet-overlay" id="toolsSheetOverlay"></div>
+
+  <div class="tools-sheet" id="toolsSheet">
+    <div class="tools-sheet-handle"></div>
+    <div class="tools-sheet-title">Choose a Tool</div>
+    <div class="tools-sheet-grid">
+      <button class="tool-btn active" data-mode="summarize"   data-i18n="toolSummarize">Summarize</button>
+      <button class="tool-btn" data-mode="flashcards"  data-i18n="toolFlashcards">Flashcards</button>
+      <button class="tool-btn" data-mode="quiz"        data-i18n="toolQuiz">Quiz</button>
+      <button class="tool-btn" data-mode="keypoints"   data-i18n="toolKeyPoints">Key Points</button>
+      <button class="tool-btn" data-mode="translate"   data-i18n="toolTranslate">Translate</button>
+      <button class="tool-btn" data-mode="simplify"    data-i18n="toolSimplify">Simplify</button>
+      <button class="tool-btn" data-mode="studynotes"  data-i18n="toolStudyNotes">Study Notes</button>
+      <button class="tool-btn" data-mode="mindmap"     data-i18n="toolMindMap">Mind Map</button>
+      <button class="tool-btn" data-mode="explain"     data-i18n="toolExplain">Explain</button>
+      <button class="tool-btn" data-mode="compare"     data-i18n="toolCompare">Compare</button>
+      <button class="tool-btn" data-mode="timeline"    data-i18n="toolTimeline">Timeline</button>
+      <button class="tool-btn" data-mode="definitions" data-i18n="toolDefinitions">Definitions</button>
+      <button class="tool-btn" data-mode="examples"    data-i18n="toolExamples">Examples</button>
+      <button class="tool-btn" data-mode="critique"    data-i18n="toolCritique">Critique</button>
+      <button class="tool-btn" data-mode="essay"       data-i18n="toolEssay">Essay</button>
+      <button class="tool-btn" data-mode="outline"     data-i18n="toolOutline">Outline</button>
+      <button class="tool-btn" data-mode="paraphrase"  data-i18n="toolParaphrase">Paraphrase</button>
+      <button class="tool-btn" data-mode="procon"      data-i18n="toolProCon">Pro &amp; Con</button>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/i18next@23.16.4/dist/umd/i18next.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js"></script>

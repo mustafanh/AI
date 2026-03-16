@@ -53,6 +53,9 @@ const newChatBtn       = document.getElementById("newChatBtn");
 const sidebarToggle    = document.getElementById("sidebarToggle");
 const sidebar          = document.getElementById("sidebar");
 const convList         = document.getElementById("convList");
+const toolsFab         = document.getElementById("toolsFab");
+const toolsSheet       = document.getElementById("toolsSheet");
+const toolsSheetOverlay = document.getElementById("toolsSheetOverlay");
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
@@ -391,12 +394,23 @@ function clearChatUI() {
 
 function toggleSidebar() {
   if (!sidebar) return;
-  sidebar.classList.toggle("open");
+  const isOpen = sidebar.classList.toggle("open");
+  let overlay = document.getElementById("sidebarOverlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.className = "sidebar-overlay";
+    overlay.id = "sidebarOverlay";
+    overlay.addEventListener("click", closeSidebar);
+    document.body.appendChild(overlay);
+  }
+  overlay.classList.toggle("show", isOpen);
 }
 
 function closeSidebar() {
   if (!sidebar) return;
   sidebar.classList.remove("open");
+  const overlay = document.getElementById("sidebarOverlay");
+  if (overlay) overlay.classList.remove("show");
 }
 
 // ─── EVENTS ───────────────────────────────────────────────────────────────────
@@ -483,6 +497,21 @@ function bindEvents() {
   });
 
   window.addEventListener("resize", () => { autoResizeTextarea(); scrollToBottom(); });
+
+  // Mobile FAB - tools bottom sheet
+  toolsFab?.addEventListener("click", toggleToolsSheet);
+  toolsSheetOverlay?.addEventListener("click", closeToolsSheet);
+
+  // Close sheet when a tool is selected on mobile
+  document.querySelectorAll(".tools-sheet .tool-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tool-btn").forEach((b) => b.classList.remove("active"));
+      // Sync active state across both desktop and mobile buttons
+      document.querySelectorAll(`.tool-btn[data-mode="${btn.dataset.mode}"]`).forEach((b) => b.classList.add("active"));
+      state.mode = btn.dataset.mode;
+      closeToolsSheet();
+    });
+  });
 }
 
 // ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
@@ -652,7 +681,7 @@ function createMessage(role, content, typing = false) {
   if (typing) {
     card.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
   } else {
-    card.textContent = content;
+    card.innerHTML = renderMarkdown(content);
   }
 
   wrapper.appendChild(avatar);
@@ -672,13 +701,39 @@ function typeText(element, text) {
     let i = 0;
     function step() {
       if (i < text.length) {
-        element.textContent += text.charAt(i++);
+        i++;
+        element.innerHTML = renderMarkdown(text.slice(0, i));
         scrollToBottom();
         setTimeout(step, 8);
-      } else { resolve(); }
+      } else {
+        element.innerHTML = renderMarkdown(text);
+        resolve();
+      }
     }
     step();
   });
+}
+
+function renderMarkdown(text) {
+  if (!text) return "";
+  let s = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  s = s.replace(/```[^`\n]*\n?([\s\S]*?)```/g, "<pre><code>$1</code></pre>");
+  s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+  s = s.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+  s = s.replace(/^## (.+)$/gm,  "<h2>$1</h2>");
+  s = s.replace(/^# (.+)$/gm,   "<h1>$1</h1>");
+  s = s.replace(/[*][*][*]([^*]+)[*][*][*]/g, "<strong><em>$1</em></strong>");
+  s = s.replace(/[*][*]([^*]+)[*][*]/g,       "<strong>$1</strong>");
+  s = s.replace(/[*]([^*\n]+)[*]/g,           "<em>$1</em>");
+  s = s.replace(/^[ \t]*[-*] (.+)$/gm,  "<li>$1</li>");
+  s = s.replace(/^[ \t]*\d+[.] (.+)$/gm, "<li>$1</li>");
+  s = s.replace(/((<li>[^<]*<\/li>\n?)+)/g, "<ul>$1</ul>");
+  s = s.replace(/\n\n/g, "<br><br>");
+  s = s.replace(/\n/g,   "<br>");
+  return s;
 }
 
 async function animateLanguageSwitch(lang) {
@@ -699,6 +754,19 @@ async function animateLanguageSwitch(lang) {
 
   els.forEach((el) => { el.classList.remove("lang-fade-out"); el.classList.add("lang-fade-in"); });
   setTimeout(() => els.forEach((el) => el.classList.remove("lang-fade-in")), 220);
+}
+
+function toggleToolsSheet() {
+  if (!toolsSheet) return;
+  const isOpen = toolsSheet.classList.toggle("open");
+  toolsFab?.classList.toggle("open", isOpen);
+  toolsSheetOverlay?.classList.toggle("show", isOpen);
+}
+
+function closeToolsSheet() {
+  toolsSheet?.classList.remove("open");
+  toolsFab?.classList.remove("open");
+  toolsSheetOverlay?.classList.remove("show");
 }
 
 function escapeHtml(str) {
