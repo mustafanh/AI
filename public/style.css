@@ -275,6 +275,14 @@ body.dark #particles-canvas {
   flex-wrap: wrap;
 }
 
+.copyright {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
 .mini-btn,
 .tool-btn,
 .response-lang-btn,
