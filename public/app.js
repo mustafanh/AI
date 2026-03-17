@@ -8,11 +8,10 @@ const state = {
   userId: "",
   selectedFile: null,
   selectedImage: null,
-  chatHistory: [],
+  chatHistory: [],          // in-memory messages for current conversation
   currentConversationId: null,
   conversations: [],
-  isLoggedIn: false,
-  isSending: false
+  isLoggedIn: false
 };
 
 // ─── DOM REFS ────────────────────────────────────────────────────────────────
@@ -70,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.attachRippleEffect();
   window.attachToolsBarDrag();
 
+  // Try to restore session from localStorage
   const savedUserId = localStorage.getItem("userId");
   if (savedUserId) {
     try {
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
       const data = await res.json();
       if (res.ok && data.user) {
-        await loginSuccess(data.user, false);
+        loginSuccess(data.user, false);
         return;
       }
     } catch (_) {}
@@ -124,8 +124,8 @@ function onRegIdInput() {
 
   if (/[\u0600-\u06FF]/.test(val) || !/^[a-z0-9_]{3,30}$/.test(val)) {
     regIdStatus.textContent = state.uiLanguage === "ar"
-      ? "❌ الـ ID يجب أن يحتوي فقط على حروف إنجليزية وأرقام وشرطة سفلية"
-      : "❌ Only English letters, numbers, underscores";
+      ? "❌ الـ ID يجب أن يحتوي فقط على حروف إنجليزية وأرقام وشرطة سفلية — بدون عربي"
+      : "❌ Only English letters, numbers, underscores — no Arabic";
     regIdStatus.className = "field-status error";
     return;
   }
@@ -176,8 +176,12 @@ async function doRegister() {
     });
 
     const data = await res.json();
-    if (!res.ok) { registerError.textContent = data.error; return; }
-    await loginSuccess(data.user, true);
+    if (!res.ok) {
+      registerError.textContent = data.error;
+      return;
+    }
+
+    loginSuccess(data.user, true);
   } catch (e) {
     registerError.textContent = e.message;
   } finally {
@@ -208,8 +212,12 @@ async function doLogin() {
     });
 
     const data = await res.json();
-    if (!res.ok) { loginError.textContent = data.error; return; }
-    await loginSuccess(data.user, false);
+    if (!res.ok) {
+      loginError.textContent = data.error;
+      return;
+    }
+
+    loginSuccess(data.user, false);
   } catch (e) {
     loginError.textContent = e.message;
   } finally {
@@ -228,6 +236,7 @@ async function loginSuccess(user, isNew) {
   localStorage.setItem("userId", user.id);
   localStorage.setItem("userName", user.name);
 
+  // Restore user settings
   if (user.language && user.language !== state.uiLanguage) {
     state.uiLanguage = user.language;
     await i18next.changeLanguage(user.language);
@@ -244,10 +253,14 @@ async function loginSuccess(user, isNew) {
 
   hideAuthModal();
   updateGreeting();
+
   if (userIdBadge) userIdBadge.textContent = `@${user.id}`;
 
   await loadConversations();
-  if (!isNew) showWelcomeBack();
+
+  if (!isNew) {
+    showWelcomeBack();
+  }
 }
 
 function logout() {
@@ -263,11 +276,10 @@ function logout() {
 
   clearChatUI();
   renderConvList();
-  closeSidebar();
   showAuthModal();
 }
 
-// ─── CONVERSATIONS ────────────────────────────────────────────────────────────
+// ─── CONVERSATIONS SIDEBAR ────────────────────────────────────────────────────
 
 async function loadConversations() {
   if (!state.userId) return;
@@ -283,7 +295,7 @@ function renderConvList() {
   if (!convList) return;
   convList.innerHTML = "";
 
-  if (!state.isLoggedIn || !state.conversations.length) {
+  if (!state.conversations.length) {
     const empty = document.createElement("div");
     empty.className = "conv-empty";
     empty.textContent = state.uiLanguage === "ar" ? "لا توجد محادثات بعد" : "No conversations yet";
@@ -291,7 +303,7 @@ function renderConvList() {
     return;
   }
 
-  state.conversations.forEach(conv => {
+  state.conversations.forEach((conv) => {
     const item = document.createElement("div");
     item.className = "conv-item" + (conv.id === state.currentConversationId ? " active" : "");
     item.dataset.id = conv.id;
@@ -304,15 +316,15 @@ function renderConvList() {
 
     item.innerHTML = `
       <div class="conv-item-inner">
-        <div class="conv-mode-badge">${escapeHtml(modeLabel)}</div>
+        <div class="conv-mode-badge">${modeLabel}</div>
         <div class="conv-title">${escapeHtml(conv.title || "Untitled")}</div>
-        <div class="conv-date">${escapeHtml(date)}</div>
+        <div class="conv-date">${date}</div>
       </div>
       <button class="conv-delete-btn" data-id="${conv.id}" title="Delete">✕</button>
     `;
 
     item.querySelector(".conv-item-inner").addEventListener("click", () => loadConversation(conv.id));
-    item.querySelector(".conv-delete-btn").addEventListener("click", e => {
+    item.querySelector(".conv-delete-btn").addEventListener("click", (e) => {
       e.stopPropagation();
       deleteConv(conv.id);
     });
@@ -321,56 +333,32 @@ function renderConvList() {
   });
 }
 
-// ─── FIX: load conversation without flashing welcome message ─────────────────
-
 async function loadConversation(convId) {
-  // Optimistically highlight in sidebar
-  convList.querySelectorAll(".conv-item").forEach(i => {
-    i.classList.toggle("active", i.dataset.id === convId);
-  });
-
   try {
     const res = await fetch(`/api/conversations/${state.userId}/${convId}/messages`);
-    if (!res.ok) throw new Error("Failed to fetch messages");
-
     const data = await res.json();
     const msgs = data.messages || [];
 
     state.currentConversationId = convId;
-    state.chatHistory = msgs.map(m => ({
-      role: m.role === "assistant" ? "assistant" : "user",
-      content: m.content
-    }));
+    state.chatHistory = msgs.map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content }));
 
-    // Wipe chat area completely first
-    chatMessages.innerHTML = "";
+    clearChatUI();
 
-    if (msgs.length === 0) {
-      chatMessages.innerHTML = `
-        <div class="message ai soft-enter">
-          <div class="avatar ai-avatar">AI</div>
-          <div class="message-card"><p>${i18next.t("aiWelcomeMessage")}</p></div>
-        </div>`;
-    } else {
-      // Render all messages without animation for speed
-      msgs.forEach(msg => {
-        appendMessage(msg.role === "assistant" ? "ai" : "user", msg.content, false);
-      });
-    }
+    msgs.forEach((msg) => {
+      createMessage(msg.role === "assistant" ? "ai" : "user", msg.content);
+    });
 
-    scrollToBottom();
     renderConvList();
     closeSidebar();
   } catch (e) {
     console.error("Failed to load conversation:", e);
-    showToast(state.uiLanguage === "ar" ? "فشل تحميل المحادثة" : "Failed to load conversation", "error");
   }
 }
 
 async function deleteConv(convId) {
   try {
     await fetch(`/api/conversations/${convId}`, { method: "DELETE" });
-    state.conversations = state.conversations.filter(c => c.id !== convId);
+    state.conversations = state.conversations.filter((c) => c.id !== convId);
 
     if (state.currentConversationId === convId) {
       state.currentConversationId = null;
@@ -389,8 +377,6 @@ function startNewChat() {
   state.chatHistory = [];
   clearChatUI();
   renderConvList();
-  closeSidebar();
-  userInput.focus();
 }
 
 function clearChatUI() {
@@ -398,9 +384,10 @@ function clearChatUI() {
     <div class="message ai soft-enter">
       <div class="avatar ai-avatar">AI</div>
       <div class="message-card">
-        <p>${i18next.t("aiWelcomeMessage")}</p>
+        <p data-i18n="aiWelcomeMessage">${i18next.t("aiWelcomeMessage")}</p>
       </div>
-    </div>`;
+    </div>
+  `;
 }
 
 // ─── SIDEBAR ──────────────────────────────────────────────────────────────────
@@ -408,7 +395,15 @@ function clearChatUI() {
 function toggleSidebar() {
   if (!sidebar) return;
   const isOpen = sidebar.classList.toggle("open");
-  getOrCreateOverlay().classList.toggle("show", isOpen);
+  let overlay = document.getElementById("sidebarOverlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.className = "sidebar-overlay";
+    overlay.id = "sidebarOverlay";
+    overlay.addEventListener("click", closeSidebar);
+    document.body.appendChild(overlay);
+  }
+  overlay.classList.toggle("show", isOpen);
 }
 
 function closeSidebar() {
@@ -418,18 +413,6 @@ function closeSidebar() {
   if (overlay) overlay.classList.remove("show");
 }
 
-function getOrCreateOverlay() {
-  let overlay = document.getElementById("sidebarOverlay");
-  if (!overlay) {
-    overlay = document.createElement("div");
-    overlay.className = "sidebar-overlay";
-    overlay.id = "sidebarOverlay";
-    overlay.addEventListener("click", closeSidebar);
-    document.body.appendChild(overlay);
-  }
-  return overlay;
-}
-
 // ─── EVENTS ───────────────────────────────────────────────────────────────────
 
 function bindEvents() {
@@ -437,33 +420,30 @@ function bindEvents() {
   authTabRegister?.addEventListener("click", () => switchAuthTab("register"));
 
   loginBtn?.addEventListener("click", doLogin);
-  loginIdInput?.addEventListener("keydown", e => { if (e.key === "Enter") doLogin(); });
+  loginIdInput?.addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
 
   regIdInput?.addEventListener("input", onRegIdInput);
   registerBtn?.addEventListener("click", doRegister);
-  regNameInput?.addEventListener("keydown", e => { if (e.key === "Enter") doRegister(); });
+  regNameInput?.addEventListener("keydown", (e) => { if (e.key === "Enter") doRegister(); });
 
   logoutBtn?.addEventListener("click", logout);
   newChatBtn?.addEventListener("click", startNewChat);
   sidebarToggle?.addEventListener("click", toggleSidebar);
 
-  // Tool buttons — keep desktop + mobile in sync
-  document.querySelectorAll(".tool-btn").forEach(btn => {
+  document.querySelectorAll(".tool-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const mode = btn.dataset.mode;
-      document.querySelectorAll(".tool-btn").forEach(b => {
-        b.classList.toggle("active", b.dataset.mode === mode);
-      });
-      state.mode = mode;
-      closeToolsSheet();
+      document.querySelectorAll(".tool-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.mode = btn.dataset.mode;
     });
   });
 
-  document.querySelectorAll(".lang-btn").forEach(btn => {
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const lang = btn.dataset.lang;
       if (lang === state.uiLanguage) return;
       await animateLanguageSwitch(lang);
+
       if (state.isLoggedIn) {
         fetch(`/api/users/${state.userId}`, {
           method: "PATCH",
@@ -474,14 +454,14 @@ function bindEvents() {
     });
   });
 
-  fileInput.addEventListener("change", e => {
+  fileInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     state.selectedFile = file || null;
     if (file) { state.selectedImage = null; imageInput.value = ""; }
     updateFileUI(); updateImageUI();
   });
 
-  imageInput.addEventListener("change", e => {
+  imageInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     state.selectedImage = file || null;
     if (file) { state.selectedFile = null; fileInput.value = ""; }
@@ -497,15 +477,13 @@ function bindEvents() {
   });
 
   userInput.addEventListener("input", autoResizeTextarea);
-  userInput.addEventListener("keydown", e => {
+  userInput.addEventListener("keydown", (e) => {
     if (window.innerWidth > 768 && e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+      e.preventDefault(); sendMessage();
     }
   });
 
   sendBtn.addEventListener("click", sendMessage);
-
   themeToggle.addEventListener("click", () => {
     toggleTheme();
     if (state.isLoggedIn) {
@@ -520,34 +498,44 @@ function bindEvents() {
 
   window.addEventListener("resize", () => { autoResizeTextarea(); scrollToBottom(); });
 
+  // Mobile FAB - tools bottom sheet
   toolsFab?.addEventListener("click", toggleToolsSheet);
   toolsSheetOverlay?.addEventListener("click", closeToolsSheet);
+
+  // Close sheet when a tool is selected on mobile
+  document.querySelectorAll(".tools-sheet .tool-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tool-btn").forEach((b) => b.classList.remove("active"));
+      // Sync active state across both desktop and mobile buttons
+      document.querySelectorAll(`.tool-btn[data-mode="${btn.dataset.mode}"]`).forEach((b) => b.classList.add("active"));
+      state.mode = btn.dataset.mode;
+      closeToolsSheet();
+    });
+  });
 }
 
 // ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
 
 async function sendMessage() {
-  if (state.isSending) return;
-
   const text = userInput.value.trim();
   if (!text && !state.selectedFile && !state.selectedImage) return;
 
-  const userVisibleText = text
+  let userVisibleText = text
     || (state.selectedImage ? `[Image: ${state.selectedImage.name}]` : "")
     || (state.selectedFile  ? `[File: ${state.selectedFile.name}]`  : "");
 
-  appendMessage("user", userVisibleText);
+  createMessage("user", userVisibleText);
+
   if (text) state.chatHistory.push({ role: "user", content: text });
 
   userInput.value = "";
   autoResizeTextarea();
 
-  const aiMsg = createTypingBubble();
-
-  state.isSending = true;
-  sendBtn.disabled = true;
+  const aiMsg = createMessage("ai", "", true);
 
   try {
+    sendBtn.disabled = true;
+
     const formData = new FormData();
     formData.append("messages", JSON.stringify(state.chatHistory));
     formData.append("mode", state.mode);
@@ -580,117 +568,23 @@ async function sendMessage() {
 
     state.chatHistory.push({ role: "assistant", content: data.reply });
 
+    // Update conversation id & sidebar
     if (data.conversationId) {
-      const isNewConv = !state.currentConversationId;
+      const isNew = !state.currentConversationId;
       state.currentConversationId = data.conversationId;
-      if (isNewConv) await loadConversations();
+      if (isNew) await loadConversations();
       else renderConvList();
     }
 
-    state.selectedFile = null;
-    state.selectedImage = null;
-    fileInput.value = "";
-    imageInput.value = "";
-    updateFileUI();
-    updateImageUI();
-
+    state.selectedFile = null; state.selectedImage = null;
+    fileInput.value = ""; imageInput.value = "";
+    updateFileUI(); updateImageUI();
   } catch (error) {
-    aiMsg.card.innerHTML = `<span style="color:#f87171">⚠️ ${escapeHtml(error.message)}</span>`;
+    aiMsg.card.textContent = `Error: ${error.message}`;
   } finally {
-    state.isSending = false;
     sendBtn.disabled = false;
     scrollToBottom();
   }
-}
-
-// ─── MESSAGE HELPERS ──────────────────────────────────────────────────────────
-
-function appendMessage(role, content, animate = true) {
-  const wrapper = document.createElement("div");
-  wrapper.className = `message ${role}${animate ? " soft-enter" : ""}`;
-
-  const avatar = document.createElement("div");
-  avatar.className = `avatar ${role === "ai" ? "ai-avatar" : "user-avatar"}`;
-  avatar.textContent = role === "ai" ? "AI" : (state.userName?.charAt(0) || "U").toUpperCase();
-
-  const card = document.createElement("div");
-  card.className = "message-card";
-  card.innerHTML = renderMarkdown(content);
-
-  wrapper.appendChild(avatar);
-  wrapper.appendChild(card);
-  chatMessages.appendChild(wrapper);
-  return { wrapper, card };
-}
-
-function createTypingBubble() {
-  const wrapper = document.createElement("div");
-  wrapper.className = "message ai soft-enter";
-
-  const avatar = document.createElement("div");
-  avatar.className = "avatar ai-avatar";
-  avatar.textContent = "AI";
-
-  const card = document.createElement("div");
-  card.className = "message-card";
-  card.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
-
-  wrapper.appendChild(avatar);
-  wrapper.appendChild(card);
-  chatMessages.appendChild(wrapper);
-  scrollToBottom();
-  return { wrapper, card };
-}
-
-// legacy alias
-function createMessage(role, content, typing = false) {
-  if (typing) return createTypingBubble();
-  return appendMessage(role, content);
-}
-
-function scrollToBottom() {
-  requestAnimationFrame(() => { chatMessages.scrollTop = chatMessages.scrollHeight; });
-}
-
-function typeText(element, text) {
-  return new Promise(resolve => {
-    element.textContent = "";
-    let i = 0;
-    function step() {
-      if (i < text.length) {
-        i++;
-        element.innerHTML = renderMarkdown(text.slice(0, i));
-        scrollToBottom();
-        setTimeout(step, 8);
-      } else {
-        element.innerHTML = renderMarkdown(text);
-        resolve();
-      }
-    }
-    step();
-  });
-}
-
-function renderMarkdown(text) {
-  if (!text) return "";
-  let s = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-  s = s.replace(/```[^`\n]*\n?([\s\S]*?)```/g, "<pre><code>$1</code></pre>");
-  s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
-  s = s.replace(/^### (.+)$/gm, "<h3>$1</h3>");
-  s = s.replace(/^## (.+)$/gm,  "<h2>$1</h2>");
-  s = s.replace(/^# (.+)$/gm,   "<h1>$1</h1>");
-  s = s.replace(/[*][*][*]([^*]+)[*][*][*]/g, "<strong><em>$1</em></strong>");
-  s = s.replace(/[*][*]([^*]+)[*][*]/g,       "<strong>$1</strong>");
-  s = s.replace(/[*]([^*\n]+)[*]/g,           "<em>$1</em>");
-  s = s.replace(/^[ \t]*[-*] (.+)$/gm,  "<li>$1</li>");
-  s = s.replace(/^[ \t]*\d+[.] (.+)$/gm, "<li>$1</li>");
-  s = s.replace(/((<li>[^<]*<\/li>\n?)+)/g, "<ul>$1</ul>");
-  s = s.replace(/\n\n/g, "<br><br>");
-  s = s.replace(/\n/g,   "<br>");
-  return s;
 }
 
 // ─── UI HELPERS ───────────────────────────────────────────────────────────────
@@ -699,7 +593,7 @@ function setupLanguage(lang) {
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   document.body.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
-  document.querySelectorAll(".lang-btn").forEach(btn => {
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
   window.applyTranslations();
@@ -711,23 +605,17 @@ function setupLanguage(lang) {
 function updateGreeting() {
   if (!greetingText) return;
   greetingText.textContent = state.uiLanguage === "ar"
-    ? (state.userName ? `مرحبا، ${state.userName}` : "مرحبا")
-    : (state.userName ? `Hello, ${state.userName}` : "Hello");
+    ? (state.userName ? `مرحبا ${state.userName}` : "مرحبا")
+    : (state.userName ? `Hello ${state.userName}` : "Hello");
 }
 
 function showWelcomeBack() {
   const msg = state.uiLanguage === "ar"
     ? `مرحباً بعودتك يا ${state.userName}! 👋`
     : `Welcome back, ${state.userName}! 👋`;
-  showToast(msg);
-}
 
-function showToast(msg, type = "success") {
-  const existing = document.querySelector(".welcome-back-toast");
-  if (existing) existing.remove();
   const banner = document.createElement("div");
   banner.className = "welcome-back-toast";
-  if (type === "error") banner.style.background = "#f87171";
   banner.textContent = msg;
   document.body.appendChild(banner);
   setTimeout(() => banner.remove(), 3000);
@@ -775,9 +663,77 @@ function toggleTheme() {
 }
 
 function autoResizeTextarea() {
-  userInput.style.height = "auto";
-  const maxH = window.innerWidth <= 768 ? 160 : 200;
-  userInput.style.height = `${Math.min(userInput.scrollHeight, maxH)}px`;
+  userInput.style.height = "58px";
+  userInput.style.height = `${Math.min(userInput.scrollHeight, window.innerWidth <= 768 ? 180 : 220)}px`;
+}
+
+function createMessage(role, content, typing = false) {
+  const wrapper = document.createElement("div");
+  wrapper.className = `message ${role} soft-enter`;
+
+  const avatar = document.createElement("div");
+  avatar.className = `avatar ${role === "ai" ? "ai-avatar" : "user-avatar"}`;
+  avatar.textContent = role === "ai" ? "AI" : (state.userName?.charAt(0) || "U").toUpperCase();
+
+  const card = document.createElement("div");
+  card.className = "message-card";
+
+  if (typing) {
+    card.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+  } else {
+    card.innerHTML = renderMarkdown(content);
+  }
+
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(card);
+  chatMessages.appendChild(wrapper);
+  scrollToBottom();
+  return { wrapper, card };
+}
+
+function scrollToBottom() {
+  requestAnimationFrame(() => { chatMessages.scrollTop = chatMessages.scrollHeight; });
+}
+
+function typeText(element, text) {
+  return new Promise((resolve) => {
+    element.textContent = "";
+    let i = 0;
+    function step() {
+      if (i < text.length) {
+        i++;
+        element.innerHTML = renderMarkdown(text.slice(0, i));
+        scrollToBottom();
+        setTimeout(step, 8);
+      } else {
+        element.innerHTML = renderMarkdown(text);
+        resolve();
+      }
+    }
+    step();
+  });
+}
+
+function renderMarkdown(text) {
+  if (!text) return "";
+  let s = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  s = s.replace(/```[^`\n]*\n?([\s\S]*?)```/g, "<pre><code>$1</code></pre>");
+  s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+  s = s.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+  s = s.replace(/^## (.+)$/gm,  "<h2>$1</h2>");
+  s = s.replace(/^# (.+)$/gm,   "<h1>$1</h1>");
+  s = s.replace(/[*][*][*]([^*]+)[*][*][*]/g, "<strong><em>$1</em></strong>");
+  s = s.replace(/[*][*]([^*]+)[*][*]/g,       "<strong>$1</strong>");
+  s = s.replace(/[*]([^*\n]+)[*]/g,           "<em>$1</em>");
+  s = s.replace(/^[ \t]*[-*] (.+)$/gm,  "<li>$1</li>");
+  s = s.replace(/^[ \t]*\d+[.] (.+)$/gm, "<li>$1</li>");
+  s = s.replace(/((<li>[^<]*<\/li>\n?)+)/g, "<ul>$1</ul>");
+  s = s.replace(/\n\n/g, "<br><br>");
+  s = s.replace(/\n/g,   "<br>");
+  return s;
 }
 
 async function animateLanguageSwitch(lang) {
@@ -787,8 +743,8 @@ async function animateLanguageSwitch(lang) {
     document.querySelector(".chat-layout")
   ].filter(Boolean);
 
-  els.forEach(el => { el.classList.remove("lang-fade-in"); el.classList.add("lang-fade-out"); });
-  await new Promise(r => setTimeout(r, 140));
+  els.forEach((el) => { el.classList.remove("lang-fade-in"); el.classList.add("lang-fade-out"); });
+  await new Promise((r) => setTimeout(r, 140));
 
   state.uiLanguage = lang;
   localStorage.setItem("uiLanguage", lang);
@@ -796,8 +752,8 @@ async function animateLanguageSwitch(lang) {
   setupLanguage(lang);
   renderConvList();
 
-  els.forEach(el => { el.classList.remove("lang-fade-out"); el.classList.add("lang-fade-in"); });
-  setTimeout(() => els.forEach(el => el.classList.remove("lang-fade-in")), 220);
+  els.forEach((el) => { el.classList.remove("lang-fade-out"); el.classList.add("lang-fade-in"); });
+  setTimeout(() => els.forEach((el) => el.classList.remove("lang-fade-in")), 220);
 }
 
 function toggleToolsSheet() {
@@ -814,10 +770,5 @@ function closeToolsSheet() {
 }
 
 function escapeHtml(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
